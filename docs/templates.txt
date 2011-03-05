@@ -1,0 +1,69 @@
+<!--Templates-->
+<font size="-1">
+<a href="mode.html">Weblog Mode</a> |
+<a href="index.html">Contents</a> |
+<a href="macros.html">Macros</a>
+</font>
+
+{@blogmax.el} works by substituting your text files into
+templates that you define. It looks in the directory
+containing the text file for the template and then in each
+parent directory until it finds it. Most sites will just
+have one template in the main directory, but you don't have
+to do it that way. And you can also have two different sites
+that share some templates by making their root directories
+both children of a directory containing the templates.
+
+You control the substitution with
+<a href="macros.html">
+macros</a>, some of which look up shortcuts, some of which
+pull in file content, and some of which report certain
+information about the current file or your blog as a
+whole. You can also use the full power of Emacs Lisp in a
+macro.
+
+There are four templates:
+<ul>
+<li>The page template: <code>page-template.tmpl</code><br>
+This is the top-level template. Rendering of every page
+starts with the contents of this template.
+<li>The content template:
+<code>content-template.tmpl</code><br> This template is
+substituted for the \{contentTemplate} macro on daily blog
+pages, pages that are in your site's root directory.
+<li>The story template: <code>story-template.tmpl</code><br>
+This template is substituted for the \{contentTemplate}
+macro on story pages, pages that are in a sub-directory of
+your site's root direectory.
+<li>The day template: <code>day-template.tmpl</code><br>
+This template is substituted for the \{dayTemplate} macro.
+</ul>
+<hr>
+Here's the page-template.tmpl file for this site. Note the \{txtLink}
+macro near the end of the file. That generates a link to the text file
+containing the page's contents. This allows you to easily get to the
+contents of each page in this site.
+<blockquote>
+{include "../page-template.tmpl" t t}
+</blockquote>
+<hr>
+Here's the story-template.tmpl file for this site. This
+replaces \{contentTemplate} in the text above.
+<blockquote>
+{include "../story-template.tmpl" t t}
+</blockquote>
+<hr>
+<a name="text">
+Here's the file
+<a href="templates.txt">
+templates.txt</a> that provides the content for this
+page. This replaces \{storyContent} in the text above.
+<blockquote>
+{include "templates.txt" t t}
+</blockquote>
+
+<font size="-1">
+<a href="mode.html">Weblog Mode</a> |
+<a href="index.html">Contents</a> |
+<a href="macros.html">Macros</a>
+</font>

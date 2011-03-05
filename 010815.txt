@@ -1,0 +1,5 @@
+<!--BlogMax 1.0-->
+I labelled BlogMax as version 1.0 today on its
+<a href="http://freshmeat.net/projects/blogmax/">
+freshmeat project page</a>. Nothing new since August 3, but I've been
+using it for long enough to consider it production quality.

@@ -1,0 +1,10 @@
+<!--More Docs-->
+I added three new
+<a href="docs/index.html">
+docs</a> pages:
+<a href="docs/install.html">
+Installation</a>,
+<a href="docs/rss.html">
+RSS</a>, and
+<a href="docs/dayinthelife.html">
+A Day in the Life of a BlogMax Web Site</a>.

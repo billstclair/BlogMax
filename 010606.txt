@@ -1,0 +1,12 @@
+<!--BlogMax 0.9-->
+I tried BlogMax in Emacs 20.4.1 running on Mandrake 6.1 (via
+VMWare). It appears to work, though I didn't try everything. I'm gonna
+call it version 0.9 and submit it to freshmeat. Hopefully, some Linux
+folks will check it out and give me feedback on how well it works for
+them. Hint. Hint. I added a missing &lt;/td> in the calendar, which
+caused it to misbehave in Netspace 4.61.
+
+My Caldera download never finished, and I couldn't figure out how to
+aim VMware's virtual CD-ROM drive at an ISO image. I remembered that
+Brian gave me a Linux disk a long time ago. Fortunately, I stashed it
+in my laptop case.

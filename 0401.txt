@@ -1,0 +1,13 @@
+<!--January 2004-->
+<a href="0306.html">December 2003</a> | <b>January 2004</b> | <a href="0409.html">February</a>
+<p>
+<a href="040103.html">Saturday, 3 January</a>: "Permalink" macro
+<ul>
+<li>the new "pl-macro-text" parameter in<a href="docs/weblogini.html">
+weblog.ini</a>
+<li>permalinks. I'm including an excerpt from the<a href="http://billstclair.com/usdocs/declaration.html">
+Declaration of Independence</a>
+</ul>
+
+<p>
+<a href="0306.html">December 2003</a> | <b>January 2004</b> | <a href="0409.html">February</a>

@@ -1,0 +1,9 @@
+<!--June 2003-->
+<a href="0210.html">May</a> | <b>June 2003</b> | <a href="0401.html">July</a>
+<p>
+<a href="030602.html">Monday, 2 June</a>: Some bug fixes
+<ul>
+</ul>
+
+<p>
+<a href="0210.html">May</a> | <b>June 2003</b> | <a href="0401.html">July</a>

@@ -1,0 +1,3 @@
+<!--Jargon File Macro-->
+I added a new macro: \{jargon "entry"} includes a link to an entry in
+the Hacker's dictionary. Can you {jargon "grok"} it?

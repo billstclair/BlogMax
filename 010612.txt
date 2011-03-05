@@ -1,0 +1,7 @@
+<!--Feedreader Compatible RSS-->
+I updated {@blogmax.el} to create more standard-compliant RSS. I did
+this so it would work correctly with
+<a href="http://www.feedreader.com/">
+Feedreader</a>. I also changed
+<a href="rss-template.xml">
+rss-template.xml</a> to specify rss version 0.91 instead of 0.92.

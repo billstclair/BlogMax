@@ -1,0 +1,157 @@
+<html>
+<head>
+<title>BlogMax: Blogging in Emacs - BlogMax 1.01</title>
+</head>
+<body>
+<font size="+3"><b>
+<a href="index.html">
+BlogMax: Blogging in Emacs</a></b></font><br>
+<i>A great way to maintain a blog</i>
+<table width="99%">
+<tr><td align="right" valign="top">
+<!--Side Links-->
+<b>
+<a href="index.html">Home</a>
+<p>
+<a href="docs/license.html">License</a>
+<p>
+<a href="../blogmax.zip">Download</a>
+<p>
+<a href="docs/index.html">Docs</a>
+<p>
+<a href="docs/blogs.html">Blogs</a>
+</b>
+</td>
+<td width="10px">&nbsp;</td>
+<td width="1" bgcolor="gray"></td>
+<td width="10px">&nbsp;</td>
+<td valign="top" width="99%">
+BlogMax is an Emacs package that aids in the creation of a
+weblog. News below. See the
+<a href="docs/index.html">Docs</a> page
+for details.
+<p>
+<table width="99%" cellspacing="0" border="0">
+<tr>
+<td bgcolor="black">
+<font size="+1" color="#f8f0ff">
+<b>BlogMax 1.01</b>
+</font>
+</td>
+<td bgcolor="black" align="right" valign="middle">
+<p>
+</td>
+</tr>
+</table>
+<b>Saturday, October 5, 2002</b><p>
+<!--BlogMax 1.01-->
+Hard to believe it's been almost a year since my last update. I use
+BlogMax almost every day for my political blog
+(<a href="http://billstclair.com/blog/">End the War on Freedom</a>). I've made some small changes to it over
+the last eleven months, but I'm just now getting around to uploading
+them.
+<p>
+I converted the three image files from GIF to PNG. Hopefully, this
+will be good news to my Linux users.
+<p>
+<a href="weblog.ini">
+weblog.ini</a> now includes some comments from
+<a href=" http://jamesthornton.com">
+James Thornton</a> on using
+<a href="http://sourceforge.net/projects/tramp/">
+Tramp</a> to do "scp" for the web site upload.
+It also includes a new "month-index" flag, which controls whether a
+monthly index page is generated and linked to the month name in the
+output of the {calendar}
+<a href="docs/macros.html">
+macro</a> (as you should see in the upper right-hand corner of this
+page). The default is to generate the monthly index file.
+<p>
+I implemented
+<a href="http://www.minority-report.co.uk/">
+Tony Sidaway</a>'s suggestions, adding "alt" attributes to "&lt;img
+...>" tags and "#" to the colors in the template files. I also removed
+the final newline in "side-links.inc". The generated html should now
+pass weblint, though it still uses tables for layout because I've been
+too lazy to learn enough CSS to switch.
+<p>
+The {calendar}
+<a href="docs/macros.html">
+macro</a> now makes the link to the previous or next month go to the
+previous or next day file even if it's further away than a month.
+<p>
+<p>
+<p>
+</td>
+<td valign="top">
+<table border="0" cellspacing="0" cellpadding="1">
+<tr><td colspan="7"><center><a href="0210.html">October</a> 2002</center></td></tr>
+<tr>
+<td><font size="-2" color="green">Sun</font></td>
+<td><font size="-2" color="green">Mon</font></td>
+<td><font size="-2" color="green">Tue</font></td>
+<td><font size="-2" color="green">Wed</font></td>
+<td><font size="-2" color="green">Thu</font></td>
+<td><font size="-2" color="green">Fri</font></td>
+<td><font size="-2" color="green">Sat</font></td>
+</tr><tr>
+<td colspan="2"></td>
+<td align="center"><font size="-2">1</font></td>
+<td align="center"><font size="-2">2</font></td>
+<td align="center"><font size="-2">3</font></td>
+<td align="center"><font size="-2">4</font></td>
+<td align="center"><font size="-2" color="red">5</font></td>
+</tr><tr>
+<td align="center"><font size="-2">6</font></td>
+<td align="center"><font size="-2">7</font></td>
+<td align="center"><a href="021008.html"><font size="-2">8</font></a></td>
+<td align="center"><font size="-2">9</font></td>
+<td align="center"><font size="-2">10</font></td>
+<td align="center"><font size="-2">11</font></td>
+<td align="center"><font size="-2">12</font></td>
+</tr><tr>
+<td align="center"><font size="-2">13</font></td>
+<td align="center"><font size="-2">14</font></td>
+<td align="center"><font size="-2">15</font></td>
+<td align="center"><font size="-2">16</font></td>
+<td align="center"><font size="-2">17</font></td>
+<td align="center"><font size="-2">18</font></td>
+<td align="center"><font size="-2">19</font></td>
+</tr><tr>
+<td align="center"><font size="-2">20</font></td>
+<td align="center"><font size="-2">21</font></td>
+<td align="center"><font size="-2">22</font></td>
+<td align="center"><font size="-2">23</font></td>
+<td align="center"><font size="-2">24</font></td>
+<td align="center"><font size="-2">25</font></td>
+<td align="center"><font size="-2">26</font></td>
+</tr><tr>
+<td align="center"><font size="-2">27</font></td>
+<td align="center"><font size="-2">28</font></td>
+<td align="center"><font size="-2">29</font></td>
+<td align="center"><font size="-2">30</font></td>
+<td align="center"><font size="-2">31</font></td>
+</tr><tr>
+<td align="center" colspan="7"><font size="-2"><a href="011120.html">Sep</a>&nbsp;&nbsp;Nov</font>
+</td></tr>
+</table>
+<p>
+
+<center><a href="rss.xml" title="This is a link to this site's RSS channel: BlogMax: Blogging in Emacs">
+<img src="xml.png" alt="xml" height="14" width="36" border="0"></a></center>
+<p>
+</td></tr>
+</table>
+<hr size="1" noshade>
+<table width="99%" cellspacing="0" cellpadding="2" border="0">
+<tr><td>
+<a href="http://www.gnu.org/software/emacs/">
+<img src="emacs.png" alt="emacs" align="left"></a>
+Copyright &copy; 2002 by Bill St. Clair
+&lt;<a href="mailto:bill@billstclair.com">bill@billstclair.com</a>&gt;
+</td><td align="right">
+<a href="021005.txt">source</a>
+</td></tr>
+</table>
+</body>
+</html>

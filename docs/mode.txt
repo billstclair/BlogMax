@@ -1,0 +1,149 @@
+<!--Weblog Mode-->
+<font size="-1">
+<a href="dayfiles.html">Weblog Day Files</a> |
+<a href="index.html">Contents</a> |
+<a href="templates.html">Templates</a>
+</font>
+
+This page documents weblog mode, accessible via the "weblog-mode"
+Emacs command.
+
+When you set a file to weblog mode, the auto-fill submode is
+automatically turned on. If you don't like this, change the code. I
+really really like this to be automatic.
+
+Weblog mode inherits from HTML mode. Hence all of HTML mode's commands
+are available. Even though you are editing ".txt" files, they are
+really HTML, so HTML mode makes the most sense. Trust me.
+
+You should rarely if ever need to explicitly use the weblog-mode
+command, since ".txt" files in a weblog directory will be set to
+weblog mode automagically.
+
+The following commands are available in weblog mode. Key bindings are
+included in parentheses. "M-" means that the meta key ("Alt" on
+Windoze systems or an "Esc" prefix) is pressed along with the
+following key. "C-" means that the control key is pressed along with
+the following key. "C-M-" means that both the control and meta keys
+are pressed along with the following key.
+
+<b>weblog-insert-source-key (M-])</b><br>
+Inserts the text "[\{@}]", which is a shortcut between square
+brackets, and positions the cursor to type the shortcut name. I use
+this to link to sources of my stories.
+
+<b>weblog-insert-shortcut (M-\})</b><br>
+Inserts the text "\{@}", which is the macro for a shortcut, and
+positions the cursor to type the shortcut name.
+
+<b>weblog-insert-comment (M-!)</b><br>
+Inserts the text "&lt!----&gt;" and positions the cursor in the middle
+of the four dashes. A comment on the first line is how you tell
+BlogMax the title of your stories, accessible via the \{title} macro.
+
+<b>weblog-yank-link (C-M-a)</b><br>
+Insert a new link in the text with the last killed text (or copied
+from another application) as the url for the "href" section of the
+tag. For example, if I selected "http://billstclair.com/" in my web
+browser and copied the text, then moved back to an Emacs page in
+weblog mode and typed C-M-a, the following text would be inserted:
+<blockquote>
+&lt;a href="http://billstclair.com/"><br>
+&lt;/a>
+</blockquote>
+The cursor is positioned before the closing "&lt;/a>", ready for
+you to type the text that will clickable in the browser. It helps to
+put links at the beginning of a line with another newline after the
+first greater than sign. This prevents M-q from breaking in the middle
+of the anchor tag. it also makes it easier to see where your links
+are.
+
+<b>weblog-yank-blockquote (C-M-u)</b><br>
+Insert a blockquote section containing the most recently killed
+text. For example, if I select "BlogMax Rocks!" in this web page and
+copy it to the clipboard, then type C-M-u in a weblog mode Emacs page,
+the following appears:
+<blockquote>
+&lt;blockquote><br>
+BlogMax Rocks!<br>
+&lt;/blockquote>
+</blockquote>
+
+<b>weblog-save-both (C-x C-s)</b><br>
+This patches the usual save buffer key binding. It saves the file just
+as C-x C-s normally would, and then generates HTML for ".txt"
+files. Even if the file doesn't need saving it generates
+HTML. Sometimes you want to do this because you changed a template or
+a shortcut.
+
+<b>weblog-upload (C-x M-s)</b><br>
+This saves the selected buffer, generates and uploads HTML if it is a
+".txt" file, and then uploads the selected buffer itself. "Upload"
+here means that it copies the file to the *weblog-ftp-directory* as
+specified via the "ftp-directory" parameter in the
+"<a href="weblogini.html">weblog.ini</a>" file. If the file is the
+most recent day file, the rss.xml file is also generated and uploaded.
+
+<b>weblog-upload-index (C-x C-i)</b><br> Generates the top-level
+"index.html" file from the last *weblog-index-days* day files as
+specified via the "index-days" parameter in the
+"<a href="weblogini.html">weblog.ini</a>"
+file. With a prefix arg of zero (C-0 C-x C-i), generates and uploads
+the HTML for all the days in this month. You need to do this once per
+day if your day pages have calendars. It's smart about regenerating
+last month on the first page of the month. With a prefix arg of two
+(C-2 C-x C-i), it generates and uploads the HTML for all the days in
+the current buffer's directory and sub-directories. This is useful
+after you change a template. Any other value of the prefix arg (except
+1) will generate and upload the index file. Get used to using minus one
+here (C-- C-1). I promise I won't change that one, though I may add
+other prefix args above 2.
+
+<b>weblog-add-shortcut (C-x C-a)</b><br>
+Adds a shortcut to the "shortcuts.el" file and the *weblog-shortcuts*
+alist in memory. Queries you for the name of the shortcut and the
+shortcut itself. If you start the shortcut itself with an equal signe
+("="), that text exactly will replace the shortcut. Otherwise, the
+shortcut itself is interpreted as the url for a link and the name
+becomes the underlined text.
+
+Examples from this site's
+<a href="../shortcuts.el">
+shortcuts.el</a>:
+
+<blockquote>
+<b>Add Shortcut Named:</b> gnugpl<br>
+<b>URL:</b> =&lt;a href="http://www.gnu.org/copyleft/gpl.html">GNU General Public License&lt;/a>
+</blockquote>
+
+Now \{@gnugpl} becomes &lt;a
+href="http://www.gnu.org/copyleft/gpl.html">GNU General Public
+License&lt;/a>
+
+<blockquote>
+<b>Add Shortcut Named:</b> PayPal<br>
+<b>URL:</b> http://www.paypal.com/
+</blockquote>
+
+Now \{@paypal} becomes &lt;a
+href="http://www.paypal.com/">PayPal&lt;/a>.
+
+Case does not matter when you invoke a shortcut, but the name's case
+is remembered when you create a shortcut based on a URL.
+
+<b>weblog-reload-shortcuts</b><br>
+Reloads the "shortcuts.el" file for the weblog directory of the
+current buffer. This is useful after you edit that file "by hand".
+
+<b>weblog-month-index</b><br>
+Generate the month index page for this day's month. This page is
+automatically generated by weblog-upload-index if the "month-index"
+flag is true in
+<a href="weblogini.html">
+weblog.ini</a>.
+
+<font size="-1">
+<a href="dayfiles.html">Weblog Day Files</a> |
+<a href="index.html">Contents</a> |
+<a href="templates.html">Templates</a>
+</font>

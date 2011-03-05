@@ -1,0 +1,35 @@
+<!--BlogMax 1.01-->
+Hard to believe it's been almost a year since my last update. I use
+BlogMax almost every day for my political blog
+({@End the War on Freedom}). I've made some small changes to it over
+the last eleven months, but I'm just now getting around to uploading
+them.
+
+I converted the three image files from GIF to PNG. Hopefully, this
+will be good news to my Linux users.
+
+<a href="weblog.ini">
+weblog.ini</a> now includes some comments from
+<a href=" http://jamesthornton.com">
+James Thornton</a> on using
+<a href="http://sourceforge.net/projects/tramp/">
+Tramp</a> to do "scp" for the web site upload.
+It also includes a new "month-index" flag, which controls whether a
+monthly index page is generated and linked to the month name in the
+output of the \{calendar}
+<a href="docs/macros.html">
+macro</a> (as you should see in the upper right-hand corner of this
+page). The default is to generate the monthly index file.
+
+I implemented
+<a href="http://www.minority-report.co.uk/">
+Tony Sidaway</a>'s suggestions, adding "alt" attributes to "&lt;img
+...>" tags and "#" to the colors in the template files. I also removed
+the final newline in "side-links.inc". The generated html should now
+pass weblint, though it still uses tables for layout because I've been
+too lazy to learn enough CSS to switch.
+
+The \{calendar}
+<a href="docs/macros.html">
+macro</a> now makes the link to the previous or next month go to the
+previous or next day file even if it's further away than a month.

@@ -1,0 +1,20 @@
+<!--BlogMax now works in XEmacs-->
+BlogMax formerly used ange-ftp to upload files to the web site. It
+appears that ange-ftp will run in XEmacs, but it isn't included by
+default. Fortunately, efs <i>is</i> included in XEmacs and provides
+much the same functionality as ange-ftp. I discovered this via
+(apropos "ftp"), which showed up an instance of "ange-ftp" in the
+bbdb-ftp command. Perusing the bbdb source revealed that efs can be
+used in place of ange-ftp and a method to use to decide which one to
+load. Then I had to do some hacking to prevent auto-fill from
+indenting every line by two characters. The "define-derived-mode" for
+"weblog-mode" now makes sgml-indent-step a local variable in the
+buffer and sets it to nil. This means no normal HTML indenting will
+happen in a weblog text file. I doubt anyone will notice. I didn't
+play with it much in XEmacs, but it appears to generate html, create
+an index, create an RSS file, and upload via FTP, at least to my local
+Windoze FTP server.
+
+I also added "previous | contents | next" links to the
+<a href="docs/index.html">
+Docs</a> pages.

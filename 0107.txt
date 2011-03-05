@@ -1,0 +1,15 @@
+<!--July 2001-->
+<a href="0106.html">June</a> | <b>July 2001</b> | <a href="0108.html">August</a>
+<p>
+<a href="010702.html">Monday, 2 July</a>: Bug Fix
+<ul>
+<li>There's a language tag in
+<a href="rss-template.xml">
+rss-template.xml</a>
+</ul>
+<a href="010710.html">Tuesday, 10 July</a>: Jargon File Macro
+<ul>
+</ul>
+
+<p>
+<a href="0106.html">June</a> | <b>July 2001</b> | <a href="0108.html">August</a>

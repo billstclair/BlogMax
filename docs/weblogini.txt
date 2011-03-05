@@ -1,0 +1,28 @@
+<!--weblog.ini-->
+<font size="-1">
+<a href="install.html">Installation</a> |
+<a href="index.html">Contents</a> |
+<a href="dayfiles.html">Weblog Day Files</a>
+</font>
+
+If the file "weblog.ini" is in a directory on your disk, then that
+directory is the root directory of a weblog site. After loading
+{@blogmax.el}, every time you open a text file, your Emacs will look
+for an ancestor of the file's directory containing a "weblog.ini"
+file. If it finds one, the file's mode will be changed to
+weblog-mode. All of the interactive commands in {@blogmax.el} also
+look for the "weblog.ini" file to set up the environment in which the
+macros are expanded.
+
+Here's the "weblog.ini" file for this site. It contains an example of
+each currently supported option and documents them pretty well. Adding
+new options is easy, if you {jargon "grok"} Emacs lisp.
+<blockquote>
+{include "../weblog.ini" t t}
+</blockquote>
+
+<font size="-1">
+<a href="install.html">Installation</a> |
+<a href="index.html">Contents</a> |
+<a href="dayfiles.html">Weblog Day Files</a>
+</font>

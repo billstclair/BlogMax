@@ -1,0 +1,11 @@
+<!--Bug Fix-->
+A couple of people have experienced the error "End of file during
+parsing" while saving a weblog page. This was due to not copying the
+shortcuts.el file into the base directory. I updated the
+<a href="docs/install.html">
+Installation</a> page to remind people to do that, and beefed up the code
+so that it will better handle a missing or malformed file.
+
+I also added a
+<a href="docs/blogs.html">
+BlogMax Blogs</a> page to collect links to the known BlogMax sites.

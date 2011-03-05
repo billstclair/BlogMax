@@ -1,0 +1,36 @@
+<!--Improving RSS-->
+I've been using
+<a href="http://www.disobey.com/amphetadesk/">
+amphetaDesk</a> to scan RSS channels. The RSS that BlogMax generates
+looks funny there. The main link appears twice. I've been thinking
+about some ideas to improve the RSS and get rid of the need to use
+&lt;br> tags for paragraph breaks within an entry. I think I know what
+to do now.
+
+I'll add two new macros, <code>\{story link title name}</code> and
+<code>\{/story}</code>. The RSS generation will include only the text
+between the two new macros (using the old algorithm for backward
+compatibility on pages that contain no instance of the
+<code>\{story}</code> macro).
+
+<code>\{story link title name}</code> will expand into:
+<blockquote>
+<code>&lt;!--story-->&lt;a href=link name=name>title&lt;/a></code>
+</blockquote>
+<code>\{/story}</code> will expand into:
+<blockquote>
+<code>&lt;!--/story--></code>
+</blockquote>
+The weblog-insert-story-tags command, likely bound to
+&lt;Ctrl>&lt;Shift>-S, will insert:
+<blockquote>
+<code>\{story ...}\{/story}</code>
+</blockquote>
+using the clipboard as the "link", auto-generating the "name" as one
+more than the largest integer already used in the file, and putting
+the cursor between the two quotes of a blank "title". RSS generation
+will then be done on the generated HTML file, finding the
+<code>&lt!--story--></code> and <code>&lt;!--/story--></code> comments
+and pulling the link and title out of the generated anchor tag.
+
+Comments?

@@ -1,0 +1,13 @@
+<!--An Example Blog-->
+This site is an example of a weblog maintained with {@blogmax.el}.
+
+Check out the links to the left to find out more. BlogMax is licensed
+under the GNU GPL. The
+<a href="../blogmax.zip">
+Download</a> link retrieves a zipped copy of the entire site (82K).
+<a href="docs/index.html">
+Docs</a> contains documentation.
+
+Enjoy!
+
+

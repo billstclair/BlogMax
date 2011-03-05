@@ -1,0 +1,19 @@
+<!--Freshmeat Announcement-->
+I created a new BlogMax project on FreshMeat. It got ID 15183 and
+"has been stored for verification by the freshmeat crew". It will
+likely appear soon at
+<a href="http://freshmeat.net/projects/blogmax/">
+freshmeat.net/projects/blogmax/</a>.
+
+I changed weblog-upload a little. C-x C-i now creates the index, but
+doesn't upload it. C-0 C-x C-i creates the index, regenerates html for
+the month, and uploads. This is what to do when today's page is ready
+for upload. C-2 C-x C-i creates and uploads the index and regenerates
+html and uploads all text files in the current directory and its
+sub-directories. This is useful after you change a template.
+
+copy-file doesn't work for me in ange-ftp. I think it has something to
+do with my web server provider's FTP server. Fortunately, save-buffer
+DOES work, so that's what I use. I haven't figured out how to upload
+binary files yet. I'd like C-3 C-x C-i to regenerate and upload the
+entire site. If you can help...

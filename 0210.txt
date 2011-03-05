@@ -1,0 +1,29 @@
+<!--October 2002-->
+<a href="0111.html">September</a> | <b>October 2002</b> | <a href="0306.html">November</a>
+<p>
+<a href="021005.html">Saturday, 5 October</a>: BlogMax 1.01
+<ul>
+<li><a href="weblog.ini">
+weblog.ini</a>
+<a href=" http://jamesthornton.com">
+James Thornton</a>
+<a href="http://sourceforge.net/projects/tramp/">
+Tramp</a>
+<a href="docs/macros.html">
+macro</a>
+<li>I implemented
+<a href="http://www.minority-report.co.uk/">
+Tony Sidaway</a>
+<li>The \{calendar}
+<a href="docs/macros.html">
+macro</a>
+</ul>
+<a href="021008.html">Tuesday, 8 October</a>: Improving RSS
+<ul>
+<li>I've been using
+<a href="http://www.disobey.com/amphetadesk/">
+amphetaDesk</a>
+</ul>
+
+<p>
+<a href="0111.html">September</a> | <b>October 2002</b> | <a href="0306.html">November</a>
