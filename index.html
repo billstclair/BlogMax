@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>BlogMax: Blogging in Emacs - BugMeNot</title>
+<title>BlogMax: Blogging in Emacs - BlogMax is on GitHub</title>
 </head>
 <body>
 <font size="+3"><b>
@@ -35,11 +35,81 @@ for details.
 <tr>
 <td bgcolor="black">
 <font size="+1" color="#f8f0ff">
+<b>BlogMax is on GitHub</b>
+</font>
+</td>
+<td bgcolor="black" align="right" valign="middle">
+<a href="110305.html" title="Permanent link to this day: 110305.html"><img src="dailyLinkIcon.png" alt="Daily" border="0" /></a>
+</td>
+</tr>
+</table>
+<b>Saturday, March 5, 2011</b><p>
+<!--BlogMax is on GitHub-->
+As you have noticed if you're following this blog, I haven't made any
+changes to BlogMax in a long, long time. Actually, I made a few
+changes up through February of 2007, when I was blogging at
+imacpr0n.com (now defunct), so today I merged those into the main
+source, and I pushed the whole thing to
+<a href="https://github.com/billstclair/BlogMax">
+github.com/BlogMax</a>. It's
+<a href="docs/license.html">
+GPL licensed</a>, so you're free to fork and make any changes you
+want, as long as they remain free. If you DO make changes, please let
+me know, so I can consider pulling them back into the main repository.
+<p>
+<p>
+<table width="99%" cellspacing="0" border="0">
+<tr>
+<td bgcolor="black">
+<font size="+1" color="#f8f0ff">
+<b>Feed on Feeds & Wikipedia</b>
+</font>
+</td>
+<td bgcolor="black" align="right" valign="middle">
+<a href="041208.html" title="Permanent link to this day: 041208.html"><img src="dailyLinkIcon.png" alt="Daily" border="0" /></a>
+</td>
+</tr>
+</table>
+<b>Wednesday, December 8, 2004</b><p>
+<!--Feed on Feeds & Wikipedia-->
+<a href="041208.html#rss" title="Permalink">#</a>
+I made the RSS generator create a kludgey <code>&lt;guid></code> tag
+for each <code>&lt;item></code>. The GUID is the date followed by the
+index of the entry in the RSS file, meaning that it will change every
+time you generate RSS. So it's not good for sites that change more
+than once a day. It does, however, cause Steve Minutillo's
+<a href="http://minutillo.com/steve/feedonfeeds/">
+Feed on Feeds</a> to notice all the items instead of just the first
+item the first time you update.
+<p>
+<a href="041208.html#simmons" title="Permalink">#</a>
+Shane Simmons donated a Wikipedia macro:
+<ul>
+<li><code>{wikipedia}</code> becomes <a href="http://www.wikipedia.org">Wikipedia</a>
+<li><code>{wikipedia "Anarchism"}</code> becomes <a href="http://www.wikipedia.org/Anarchism">Anarchism</a>
+<li><code>{wikipedia "Anarchism" "There's no government like no government"}</code> becomes
+<a href="http://www.wikipedia.org/Anarchism">There's no government like no government</a>
+</ul>
+<p>
+I didn't bother to generate a new zip file. Just download
+<a href="blogmax.el">
+<code>blogmax.el</code></a> and
+<a href="rss-template.xml">
+<code>rss-template.xml</code></a>, then <code>byte-compile-file</code>
+<code>blogmax.el</code> or download
+<a href="blogmax.elc">
+<code>blogmax.elc</code></a>.
+<p>
+<p>
+<table width="99%" cellspacing="0" border="0">
+<tr>
+<td bgcolor="black">
+<font size="+1" color="#f8f0ff">
 <b>BugMeNot</b>
 </font>
 </td>
 <td bgcolor="black" align="right" valign="middle">
-<a href="040904.html" title="Permanent link to this day: 040904.html"><img src="dailyLinkIcon.png" alt="Daily"></a>
+<a href="040904.html" title="Permanent link to this day: 040904.html"><img src="dailyLinkIcon.png" alt="Daily" border="0" /></a>
 </td>
 </tr>
 </table>
@@ -93,7 +163,7 @@ page.
 </font>
 </td>
 <td bgcolor="black" align="right" valign="middle">
-<a href="040103.html" title="Permanent link to this day: 040103.html"><img src="dailyLinkIcon.png" alt="Daily"></a>
+<a href="040103.html" title="Permanent link to this day: 040103.html"><img src="dailyLinkIcon.png" alt="Daily" border="0" /></a>
 </td>
 </tr>
 </table>
@@ -157,7 +227,7 @@ States. To prove this, let Facts be submitted to a candid world.
 </font>
 </td>
 <td bgcolor="black" align="right" valign="middle">
-<a href="030602.html" title="Permanent link to this day: 030602.html"><img src="dailyLinkIcon.png" alt="Daily"></a>
+<a href="030602.html" title="Permanent link to this day: 030602.html"><img src="dailyLinkIcon.png" alt="Daily" border="0" /></a>
 </td>
 </tr>
 </table>
@@ -185,7 +255,7 @@ structure.
 </font>
 </td>
 <td bgcolor="black" align="right" valign="middle">
-<a href="021008.html" title="Permanent link to this day: 021008.html"><img src="dailyLinkIcon.png" alt="Daily"></a>
+<a href="021008.html" title="Permanent link to this day: 021008.html"><img src="dailyLinkIcon.png" alt="Daily" border="0" /></a>
 </td>
 </tr>
 </table>
@@ -236,7 +306,7 @@ Comments?
 </font>
 </td>
 <td bgcolor="black" align="right" valign="middle">
-<a href="021005.html" title="Permanent link to this day: 021005.html"><img src="dailyLinkIcon.png" alt="Daily"></a>
+<a href="021005.html" title="Permanent link to this day: 021005.html"><img src="dailyLinkIcon.png" alt="Daily" border="0" /></a>
 </td>
 </tr>
 </table>
@@ -278,112 +348,58 @@ macro</a> now makes the link to the previous or next month go to the
 previous or next day file even if it's further away than a month.
 <p>
 <p>
-<table width="99%" cellspacing="0" border="0">
-<tr>
-<td bgcolor="black">
-<font size="+1" color="#f8f0ff">
-<b>Calendar Macro Extended</b>
-</font>
-</td>
-<td bgcolor="black" align="right" valign="middle">
-<a href="011120.html" title="Permanent link to this day: 011120.html"><img src="dailyLinkIcon.png" alt="Daily"></a>
-</td>
-</tr>
-</table>
-<b>Tuesday, November 20, 2001</b><p>
-<!--Calendar Macro Extended-->
-In response to a user request, I have added a second optional
-parameter to the <code>calendar</code> macro. It now takes two
-optional arguments, <code>file</code> and
-<code>start-day</code>. <code>file</code> defaults to the current
-weblog story file. You will rarely if ever need to specify it. Use
-<code>nil</code> to get the default. <code>start-day</code> is the day
-of the week for the first column of the calendar. 0 is Sunday, 1 is
-Monday, ..., 6 is Saturday. The default is 0, Sunday. Hence to put in
-a calendar starting on Monday, you would place the following in one of
-your template files:
-<blockquote>
-<code>{calendar nil 1}</code>
-</blockquote>
-<p>
-<p>
-<table width="99%" cellspacing="0" border="0">
-<tr>
-<td bgcolor="black">
-<font size="+1" color="#f8f0ff">
-<b>Bug Fix</b>
-</font>
-</td>
-<td bgcolor="black" align="right" valign="middle">
-<a href="010919.html" title="Permanent link to this day: 010919.html"><img src="dailyLinkIcon.png" alt="Daily"></a>
-</td>
-</tr>
-</table>
-<b>Wednesday, September 19, 2001</b><p>
-<!--Bug Fix-->
-A couple of people have experienced the error "End of file during
-parsing" while saving a weblog page. This was due to not copying the
-shortcuts.el file into the base directory. I updated the
-<a href="docs/install.html">
-Installation</a> page to remind people to do that, and beefed up the code
-so that it will better handle a missing or malformed file.
-<p>
-I also added a
-<a href="docs/blogs.html">
-BlogMax Blogs</a> page to collect links to the known BlogMax sites.
-<p>
-<p>
 <p>
 </td>
 <td valign="top">
-<table border="0" cellspacing="0" cellpadding="1">
-<tr><td colspan="7"><center><a href="0409.html">September</a> 2004</center></td></tr>
-<tr>
-<td><font size="-2" color="green">Sun</font></td>
-<td><font size="-2" color="green">Mon</font></td>
-<td><font size="-2" color="green">Tue</font></td>
-<td><font size="-2" color="green">Wed</font></td>
-<td><font size="-2" color="green">Thu</font></td>
-<td><font size="-2" color="green">Fri</font></td>
-<td><font size="-2" color="green">Sat</font></td>
+<table style="font-size: 75%; text-align: center;" border="0" cellspacing="0" cellpadding="1">
+<tr><td colspan="7" style="text-align: center; font-size: 113%;"><a href="1103.html">March</a> 2011</td></tr>
+<tr style="color: green;">
+<td>Sun</td>
+<td>Mon</td>
+<td>Tue</td>
+<td>Wed</td>
+<td>Thu</td>
+<td>Fri</td>
+<td>Sat</td>
 </tr><tr>
-<td colspan="3"></td>
-<td align="center"><font size="-2">1</font></td>
-<td align="center"><font size="-2">2</font></td>
-<td align="center"><font size="-2">3</font></td>
-<td align="center"><font size="-2" color="red">4</font></td>
+<td colspan="2"></td>
+<td align="center">1</td>
+<td align="center">2</td>
+<td align="center">3</td>
+<td align="center">4</td>
+<td align="center"><span style="color: red;">5</span></td>
 </tr><tr>
-<td align="center"><font size="-2">5</font></td>
-<td align="center"><font size="-2">6</font></td>
-<td align="center"><font size="-2">7</font></td>
-<td align="center"><font size="-2">8</font></td>
-<td align="center"><font size="-2">9</font></td>
-<td align="center"><font size="-2">10</font></td>
-<td align="center"><font size="-2">11</font></td>
+<td align="center">6</td>
+<td align="center">7</td>
+<td align="center">8</td>
+<td align="center">9</td>
+<td align="center">10</td>
+<td align="center">11</td>
+<td align="center">12</td>
 </tr><tr>
-<td align="center"><font size="-2">12</font></td>
-<td align="center"><font size="-2">13</font></td>
-<td align="center"><font size="-2">14</font></td>
-<td align="center"><font size="-2">15</font></td>
-<td align="center"><font size="-2">16</font></td>
-<td align="center"><font size="-2">17</font></td>
-<td align="center"><font size="-2">18</font></td>
+<td align="center">13</td>
+<td align="center">14</td>
+<td align="center">15</td>
+<td align="center">16</td>
+<td align="center">17</td>
+<td align="center">18</td>
+<td align="center">19</td>
 </tr><tr>
-<td align="center"><font size="-2">19</font></td>
-<td align="center"><font size="-2">20</font></td>
-<td align="center"><font size="-2">21</font></td>
-<td align="center"><font size="-2">22</font></td>
-<td align="center"><font size="-2">23</font></td>
-<td align="center"><font size="-2">24</font></td>
-<td align="center"><font size="-2">25</font></td>
+<td align="center">20</td>
+<td align="center">21</td>
+<td align="center">22</td>
+<td align="center">23</td>
+<td align="center">24</td>
+<td align="center">25</td>
+<td align="center">26</td>
 </tr><tr>
-<td align="center"><font size="-2">26</font></td>
-<td align="center"><font size="-2">27</font></td>
-<td align="center"><font size="-2">28</font></td>
-<td align="center"><font size="-2">29</font></td>
-<td align="center"><font size="-2">30</font></td>
+<td align="center">27</td>
+<td align="center">28</td>
+<td align="center">29</td>
+<td align="center">30</td>
+<td align="center">31</td>
 </tr><tr>
-<td align="center" colspan="7"><font size="-2"><a href="040103.html">Aug</a>&nbsp;&nbsp;Oct</font>
+<td align="center" colspan="7"><a href="041208.html">Feb</a>&nbsp;&nbsp;Apr
 </td></tr>
 </table>
 <p>
@@ -398,10 +414,10 @@ BlogMax Blogs</a> page to collect links to the known BlogMax sites.
 <tr><td>
 <a href="http://www.gnu.org/software/emacs/">
 <img src="emacs.png" alt="emacs" align="left"></a>
-Copyright &copy; 2004 by Bill St. Clair
+Copyright &copy; 2011 by Bill St. Clair
 &lt;<a href="mailto:bill@billstclair.com">bill@billstclair.com</a>&gt;
 </td><td align="right">
-<a href="040904.txt">source</a>
+<a href="110305.txt">source</a>
 </td></tr>
 </table>
 </body>

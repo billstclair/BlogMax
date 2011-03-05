@@ -1,5 +1,5 @@
 <!--September 2004-->
-<a href="0401.html">August</a> | <b>September 2004</b> | October
+<a href="0401.html">August</a> | <b>September 2004</b> | <a href="1103.html">October</a>
 <p>
 <a href="040904.html">Saturday, 4 September</a>: BugMeNot
 <ul>
@@ -16,4 +16,4 @@ Washington Post</a>
 </ul>
 
 <p>
-<a href="0401.html">August</a> | <b>September 2004</b> | October
+<a href="0401.html">August</a> | <b>September 2004</b> | <a href="1103.html">October</a>

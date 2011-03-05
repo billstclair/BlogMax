@@ -1,0 +1,28 @@
+<!--Feed on Feeds & Wikipedia-->
+{pl "rss"}
+I made the RSS generator create a kludgey <code>&lt;guid></code> tag
+for each <code>&lt;item></code>. The GUID is the date followed by the
+index of the entry in the RSS file, meaning that it will change every
+time you generate RSS. So it's not good for sites that change more
+than once a day. It does, however, cause Steve Minutillo's
+<a href="http://minutillo.com/steve/feedonfeeds/">
+Feed on Feeds</a> to notice all the items instead of just the first
+item the first time you update.
+
+{pl "simmons"}
+Shane Simmons donated a Wikipedia macro:
+<ul>
+<li><code>\{wikipedia}</code> becomes {wikipedia}
+<li><code>\{wikipedia "Anarchism"}</code> becomes {wikipedia "Anarchism"}
+<li><code>\{wikipedia "Anarchism" "There's no government like no government"}</code> becomes
+{wikipedia "Anarchism" "There's no government like no government"}
+</ul>
+
+I didn't bother to generate a new zip file. Just download
+<a href="blogmax.el">
+<code>blogmax.el</code></a> and
+<a href="rss-template.xml">
+<code>rss-template.xml</code></a>, then <code>byte-compile-file</code>
+<code>blogmax.el</code> or download
+<a href="blogmax.elc">
+<code>blogmax.elc</code></a>.
