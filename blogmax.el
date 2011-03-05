@@ -1,6 +1,6 @@
 ;;; blogmax.el - maintain a weblog <pre>
 
-;; Copyright (C) 2001-2004 Bill St. Clair
+;; Copyright (C) 2001-2007 Bill St. Clair
 ;; email: bill@billstclair.com
 ;; Web: http://billstclair.com/blogmax/
 
@@ -8,6 +8,37 @@
 ;;
 ;; Mod History
 ;;
+;; 070219 wws  weblog-make-rss now includes <link> and <title>, and does
+;;             a better job with the GUID.
+;; 070127 wws  weblog-story-file-p returns true for file names containing
+;;             non-digits
+;; 061220 wws  weblog-insert-centered-image
+;; 060117 wws  weblog-upload doesn't upload if *weblog-ftp-directory*
+;;             is blank or null.
+;; 051101 wws  weblog-latest-month-before works correctly when there are
+;;             future files in the directory.
+;; 050605 wws  Make it work to store the day files in year directories
+;;             (two digits matching the first two digits of the file name).
+;; 050124 wws  weblog-set-buffer-mode no longer searches for weblog.ini
+;;             unless the extension of the buffer's file name is "txt".
+;;             This stops long pauses on ange-ftp connections looking
+;;             for source files.
+;; 041208 wws  Add "GUID" to RSS so that it will work correctly with
+;;             http://minutillo.com/steve/feedonfeeds/
+;;             This is a kludge that generates new GUIDs every time
+;;             you upload the RSS file, but it works for me.
+;;             weblog-upload-rss invoked interactively now takes a prefix
+;;             argument. If 1 (the default), doesn't upload the RSS
+;;             file to the FTP server.
+;;             Add Shane Simmons' weblog-macro-wikipedia
+;; 040914 wws  {bumper back top-fore top-back top-msg bot-fore bot-back bot-msg}
+;;             Generates a bumper sticker with a top and bottom section.
+;;             back is the background color for the border around the
+;;             whole thing.
+;;             top-fore, top-back, & top-msg are the foreground color,
+;;             background color, and message for the top half.
+;;             bot-fore, bot-back, & bot-msg are the foreground color,
+;;             background color, and message for the bottom half.
 ;; 040904 wws  {pl "..."} expansion links to day page in rss file
 ;;             C-0 C-X C-I now properly uploads the previous month
 ;;             and the current file, even if the "previous" month
@@ -246,6 +277,9 @@
 ;; Bound to the file being generated
 (defvar *weblog-story-file* nil)
 
+;; True while making the index
+(defvar *weblog-making-index-p* nil)
+
 ;; The mod time of the generated file
 (defvar *weblog-story-modtime* nil)
 
@@ -258,7 +292,7 @@
 
 ;; The template for the content section of a page
 ;; The {contentTemplate} macro expands into the contents of this file.
-(defconst *weblog-content-template-file* "content-template.tmpl")
+(defvar *weblog-content-template-file* "content-template.tmpl")
 
 ;; The template for the content section of a non top-level page
 ;; The {contentTemplate} macro expands into the contents of this file.
@@ -288,7 +322,16 @@
 
 ;; Append the *weblog-directory* to the given filename
 (defun weblog-file (file)
-  (concat *weblog-directory* file))
+  (let ((res (concat *weblog-directory* file)))
+    (if (file-exists-p res)
+        res
+      (let ((first-two (and (>= (length file) 2) (substring file 0 2))))
+        (if (not first-two)
+            res
+          (let ((other-res (concat *weblog-directory* first-two "/" file)))
+            (if (file-exists-p other-res)
+                other-res
+              res)))))))
 
 (defmacro weblog-while-visiting-file (buf-var file &rest body)
   "Execute BODY with BUF-VAR bound to a buffer containing FILE."
@@ -490,7 +533,7 @@ File defaults to *weblog-shortcuts-file*"
      (unless (eq *weblog-escape-char* (char-before pos))
        (return pos)))))
 
-(defun weblog-do-replacement (f start-delim end-delim &optional keep-delims)
+(defun weblog-do-replacement (f start-delim end-delim &optional keep-delims multi-line)
   "Find all one-line strings between START-DELIM and END-DELIM.
 Call F on each one. If F returns non-NIL, replace the string and
 the delimiters with the returned value. If KEEP-DELIMS is true,
@@ -506,7 +549,8 @@ replace only the string."
      (if (null pos) (return cnt))
      (if (null end-delim)
          (setq end (point))
-       (setq end (search-forward-non-escaped end-delim (line-end-position))))
+       (setq end (search-forward-non-escaped
+		  end-delim  (and (not multi-line) (line-end-position)))))
      (unless (null end)
        (incf pos start-len)
        (let* ((s (buffer-substring pos end))
@@ -531,14 +575,27 @@ replace only the string."
         (if (weblog-lookup-shortcut s) (concat "{=" s "}")))
      "\"" "\"")))
 
-(defun weblog-map-directory (dir f &optional pred pattern descending)
+(defun weblog-directory-files (dir &optional full pattern descending year-dirs)
+  "Like directory-files, but matches pattern, sorted descending if true, and includes a list of sub-directories in year-dirs"
+  (let* ((pat (or pattern ".*\.txt"))
+         (files (directory-files dir full pat t))
+         (pred (if descending 'weblog-string-greaterp 'string-lessp))
+         (need-key nil))
+    (dolist (yd year-dirs)
+      (let ((yf (directory-files (concat dir yd "/") full pat t)))
+        (when yf
+          (setq files (nconc files yf)
+                need-key t))))
+    (if (and full need-key)
+        (sort* files pred :key 'file-name-nondirectory)
+      (sort files pred))))
+
+(defun weblog-map-directory (dir f &optional pred pattern descending year-dirs)
   "(funcall F) for every file name in DIR that satisifies PRED.
 Consider only files that match the regexp PATTERN, which defaults
 to all text files.
 Opens each file in a buffer before doing (funcall F)."
-  (let* ((pat (or pattern ".*\.txt"))
-         (files (sort (directory-files dir t pat t)
-                      (if descending 'weblog-string-greaterp 'string-lessp))))
+  (let* ((files (weblog-directory-files dir t pattern descending year-dirs)))
     (dolist (file files)
       (when (or (null pred) (funcall pred file))
         (weblog-while-visiting-file buf file
@@ -594,7 +651,7 @@ all text files."
                  ;; {@shortcut} looks up shortcut
                  (weblog-lookup-shortcut (substring s 1)))
                 ((eq *weblog-equal-sign-char* (elt s 0))
-                 ;; {=forms...} evals (forms...}
+                 ;; {=forms...} evals (forms...)
                  (let ((form (car (read-from-string
                                    (concat "(" (substring s 1) ")")))))
                    (eval form)))
@@ -603,7 +660,7 @@ all text files."
                  (let ((form (car (read-from-string
                                    (concat "(weblog-macro-" s ")")))))
                    (eval form)))))))
-   "{" "}"))
+   "{" "}" nil t))
 
 (defun weblog-remove-escapes ()
   "Remove escape characters (\"\\\") from the current buffer"
@@ -627,8 +684,17 @@ using the *weblog-story-template-file*"
     (weblog-save)))
 
 (defun weblog-story-file-p (file-name)
-  (not (equal (downcase (file-name-directory file-name))
-              (downcase *weblog-directory*))))
+  (let* ((y (third (weblog-file-mdy file-name)))
+         (dir (downcase (file-name-directory file-name)))
+         (file (file-name-sans-extension (file-name-nondirectory file-name)))
+         (file-year (substring file 0 (min 2 (length file))))
+         (sep-char (substring dir (max 0 (1- (length dir))) (length dir))))
+    (or (find-if (lambda (x) (or (< x (aref "0" 0)) (> x (aref "9" 0))))
+		 file)
+	(and (not (equal dir (downcase *weblog-directory*)))
+	     (not (equal dir
+			 (downcase
+			  (concat *weblog-directory* file-year sep-char))))))))
 
 (defun weblog-save (&optional template)
   "Save the current buffer to an html file with the same name
@@ -695,30 +761,33 @@ If FILE-NAME is non-nil, upload that file and don't generate html."
              (html-name (if textp
                             (concat (file-name-sans-extension file) ".html")
                           file))
-             (name (weblog-file-relative-name html-name *weblog-directory*)))
+             (name (weblog-file-relative-name html-name *weblog-directory*))
+	     (dont-uploadp (or (null *weblog-ftp-directory*)
+			       (equal *weblog-ftp-directory* ""))))
         (unless file-name
           (if textp
               (weblog-save-both)
             (when (buffer-modified-p) (save-buffer))))
-        (if (eq name file)
-            (message "Buffer not in *weblog-directory*")
-          (let ((ftp-name (concat *weblog-ftp-directory* name))
-                (source (if textp html-name file)))
-            ;; Don't use copy-file here. It doesn't work on my FTP server.
-            (weblog-write-text-to-file (weblog-absolute-file-contents source)
-                                       ftp-name)
-            (when (and textp (not dont-upload-source))
-              (setq ftp-name (concat (file-name-sans-extension ftp-name) ".txt"))
-              (weblog-write-text-to-file (weblog-absolute-file-contents file)
-                                         ftp-name))))
-        (when textp
-          (set-buffer buf)
-          (let ((latest-text-file (weblog-latest-text-file)))
-            (when (and latest-text-file
+        (unless dont-uploadp
+          (if (eq name file)
+              (message "Buffer not in *weblog-directory*")
+            (let ((ftp-name (concat *weblog-ftp-directory* name))
+                  (source (if textp html-name file)))
+              ;; Don't use copy-file here. It doesn't work on my FTP server.
+              (weblog-write-text-to-file (weblog-absolute-file-contents source)
+                                         ftp-name)
+              (when (and textp (not dont-upload-source))
+                (setq ftp-name (concat (file-name-sans-extension ftp-name) ".txt"))
+                (weblog-write-text-to-file (weblog-absolute-file-contents file)
+                                           ftp-name)))))
+	(when textp
+	  (set-buffer buf)
+	  (let ((latest-text-file (weblog-latest-text-file)))
+	    (when (and latest-text-file
 		       (weblog-file-in-base-dir file)
-                       (equal (weblog-file-mdy file)
-                              (weblog-file-mdy (weblog-file latest-text-file))))
-              (weblog-make-rss latest-text-file))))))))
+		       (equal (weblog-file-mdy file)
+			      (weblog-file-mdy (weblog-file latest-text-file))))
+	      (weblog-make-rss latest-text-file dont-uploadp))))))))
 
 ;; file-relative-name can include "\" characters in XEmacs.
 ;; Change them to the canonical "/".
@@ -738,18 +807,29 @@ If FILE-NAME is non-nil, upload that file and don't generate html."
 ;; Regular expression to match the weblog files
 (defconst *weblog-file-regexp* "^[0-9][0-9][0-9][0-9][0-9][0-9]\.txt$")
 
+(defun weblog-year-dirs (&optional dir)
+  (when (null dir)
+    (setq dir *weblog-directory*))
+  (mapcan '(lambda (f)
+             (and (file-directory-p f) (list (file-name-nondirectory f))))
+          (directory-files dir t "^[0-9][0-9]$")))
+
 (defun weblog-make-index ()
   "Make the index.html file with *weblog-index-days* days of data"
   (interactive)
   (weblog-with-init-params (buffer-file-name)
-    (let* ((*weblog-index-files*
+    (let* ((*weblog-making-index-p* t)
+           (*weblog-index-files*
             (nreverse (last
               (delete-if '(lambda (file)
                             (apply 'weblog-mdy-in-future-p
                                    (weblog-file-mdy file)))
-                (directory-files
-                 *weblog-directory* nil
-                 *weblog-file-regexp*))
+                (weblog-directory-files
+                 *weblog-directory*
+                 nil
+                 *weblog-file-regexp*
+                 nil
+                 (weblog-year-dirs)))
               *weblog-index-days*)))
            (first-file (car *weblog-index-files*)))
            (weblog-save-internal
@@ -836,15 +916,19 @@ MONTH and YEAR default to today's month and year."
                        (and (eq month (extract-calendar-month mdy))
                             (eq year (extract-calendar-year mdy))
                             (not (apply 'weblog-mdy-in-future-p mdy))))))
-       *weblog-file-regexp*))))
+       *weblog-file-regexp*)
+      nil
+      (list (and month (weblog-format-2d month))))))
 
 (defun weblog-latest-month-before (month year)
-  (let ((files (nreverse (directory-files *weblog-directory* nil
-                                          *weblog-file-regexp*))))
+  (let ((files (nreverse (weblog-directory-files
+                          *weblog-directory* nil *weblog-file-regexp* nil
+                          (weblog-year-dirs)))))
     (dolist (file files)
       (let ((mdy (weblog-file-mdy file)))
         (when (or (< (third mdy) year)
-                  (< (first mdy) month))
+                  (and (eql (third mdy) year)
+                       (< (first mdy) month)))
           (return (first mdy)))))))
 
 (defun weblog-zero-pad (width string)
@@ -888,10 +972,10 @@ Translate to GMT if GMT-P is true."
 
 (defun weblog-latest-text-file ()
   "Return the latest text file that is not in the future."
-  (let ((files (nreverse (last (directory-files
-                                *weblog-directory* nil
-                                *weblog-file-regexp*)
-                               *weblog-index-days*))))
+  (let ((files (weblog-directory-files
+                *weblog-directory* nil
+                *weblog-file-regexp* t
+                (weblog-year-dirs))))
     (dolist (file files)
       (unless (apply 'weblog-mdy-in-future-p (weblog-file-mdy file))
         (return file)))))
@@ -906,7 +990,7 @@ Translate to GMT if GMT-P is true."
 			 (weblog-zero-pad 2 (format "%d" (% year 100)))
 			 (weblog-zero-pad 2 (format "%d" month))
 			 "[0-9][0-9]\.txt$")))
-    (car (directory-files *weblog-directory* nil regexp))))
+    (car (weblog-directory-files *weblog-directory* nil regexp nil (weblog-year-dirs)))))
 
 (defun weblog-replace-xml-tag-text (start-tag end-tag new-text)
   "Replace the text between START-TAG and END-TAG with NEW-TEXT.
@@ -1013,10 +1097,12 @@ Currently this means it contains \"http://\" or \"ftp://\""
   (or (search "http://" (downcase url))
       (search "ftp://" (downcase url))))
 
-(defun weblog-make-rss (&optional text-file)
+(defun weblog-make-rss (&optional text-file dont-upload)
   "Create rss.xml from rss-template.xml and the newest html file.
 Upload it to the FTP server."
-  (interactive)
+  (interactive "i\np")
+  (when (integerp dont-upload)
+    (setq dont-upload (eql dont-upload 1)))
   (weblog-with-init-params (buffer-file-name)
     (unless text-file
       (setq text-file (weblog-latest-text-file)))
@@ -1026,11 +1112,12 @@ Upload it to the FTP server."
              (text (weblog-file-contents text-file))
              (time (decode-time (current-time)))
              ;(pub-time (append '(0 0 0) (cdddr time)))
-             (time-string (concat (weblog-rss-format-time time t)
-                                  " GMT"))
+             (gmt-time (weblog-rss-format-time time t))
+             (time-string (concat gmt-time " GMT"))
              ;(pub-time-string (concat (weblog-rss-format-time pub-time t)
              ;                         " GMT"))                            
-             (html-buf (create-file-buffer text-file)))
+             (html-buf (create-file-buffer text-file))
+             (idx 0))
         (set-buffer rss-buf)
         (erase-buffer)
         (insert template)
@@ -1051,19 +1138,35 @@ Upload it to the FTP server."
                 (end (search-forward "<p>" nil t))
                 (real-end (if end (- end 3) (point-max)))
                 (text (buffer-substring start real-end))
-                (link (cadr (weblog-parse-out-links start real-end))))
+                (links (cdr (weblog-parse-out-links start real-end)))
+		(link (and links (caar links)))
+		(title (and links
+			    (if (string-equal "#" (cdar links))
+				(if (cdr links) (cdadr links) "No title")
+			      (cdar links)))))
            (setq text (weblog-neuter-tags text))
 	   ;; This is for the Feedreader browser
 	   (setq text (weblog-replace-strings text "\n" " \n"))
            (set-buffer rss-buf)
-           ;; Insert the link and title
            (insert "\n    <item>\n")
-           ;;(insert "      <title>")
-           ;;(if link (insert (cdr link)) (insert "No link"))
-           ;;(insert "</title>\n")
-           ;;(insert "      <link>")
-           ;;(if link (insert (car link)) (insert *weblog-url*))
-           ;;(insert "</link>\n")
+           ;; Insert the link and title
+	   (when title
+	     (insert "      <title>")
+	     (insert title)
+	     (insert "</title>\n"))
+	   (when link
+	     (insert "      <link>")
+	     (insert link)
+	     (insert "</link>\n"))
+	   ;; Insert the GUID
+	   (cond (link
+		  (insert "      <guid isPermaLink=\"true\">")
+		  (insert link))
+		 (t (insert "      <guid>")
+		    (insert gmt-time)
+		    (insert "-")
+		    (insert (with-output-to-string (princ (incf idx))))))
+           (insert "</guid>\n")
            ;; Insert the description
            (insert "      <description>")
            (insert text)
@@ -1076,7 +1179,8 @@ Upload it to the FTP server."
         (kill-buffer html-buf)
         (set-buffer rss-buf)
         (save-buffer)
-        (weblog-upload)))))
+        (unless dont-upload
+          (weblog-upload))))))
 
 (defun weblog-parse-space-separated-string (x)
   (let ((s 0)
@@ -1246,8 +1350,8 @@ Upload it to the FTP server."
                (month-file (weblog-month-file-name month year ".html"))
                (month-name (calendar-month-name month)))
 	  (with-output-to-string
-	    (princ "<table border=\"0\" cellspacing=\"0\" cellpadding=\"1\">\n")
-	    (princ "<tr><td colspan=\"7\"><center>")
+	    (princ "<table style=\"font-size: 75%; text-align: center;\" border=\"0\" cellspacing=\"0\" cellpadding=\"1\">\n")
+	    (princ "<tr><td colspan=\"7\" style=\"text-align: center; font-size: 113%;\">")
             (if *weblog-generate-month-index-p*
                 (princ (concat
                         "<a href=\""
@@ -1258,11 +1362,11 @@ Upload it to the FTP server."
               (princ month-name))
 	    (princ " ")
             (princ year)
-            (princ "</center></td></tr>\n<tr>\n")
+            (princ "</td></tr>\n<tr style=\"color: green;\">\n")
             (dotimes (i 7)
               (princ "<td>")
               (let ((column-day (mod (+ i start-day) 7)))
-                (weblog-princ-dayname (calendar-day-name column-day 3 t)))
+                (princ (calendar-day-name column-day 2 t)))
               (princ "</td>\n"))          
             (princ "</tr><tr>\n")
             (setq day (mod (- day start-day) 7))
@@ -1349,17 +1453,14 @@ Upload it to the FTP server."
         
 (defun weblog-princ-dayname (dayname)
   "Print a single day name for weblog-macro-calendar"
-  (princ "<font size=\"-2\" color=\"green\">")
-  (princ dayname)
-  (princ "</font>"))
+  (princ dayname))
+
 
 (defun weblog-princ-day (day &optional todayp)
   "Print a single day for weblog-macro-calendar"
-  (princ "<font size=\"-2\"")
-  (if todayp (princ " color=\"red\""))
-  (princ ">")
+  (if todayp (princ "<span style=\"color: red;\">"))
   (princ day)
-  (princ "</font>"))
+  (if todayp (princ "</span>")))
 
 (defun weblog-day-file (month day year)
   "Return the name of the html file for the given day"
@@ -1410,7 +1511,8 @@ Upload it to the FTP server."
                      (return-from map (apply 'weblog-day-file mdy))))
                  nil))
      *weblog-file-regexp*
-     t)))
+     t
+     (weblog-year-dirs))))
 
 (defun weblog-first-day-file-in-next-month (month year)
   "Find the first html file in the next month"
@@ -1433,7 +1535,9 @@ Upload it to the FTP server."
                              (> y year))
                      (return-from map (apply 'weblog-day-file mdy))))
                  nil))
-     *weblog-file-regexp*)))
+     *weblog-file-regexp*
+     nil
+     (weblog-year-dirs))))
 
 ;; {storyDate} macro
 (defun weblog-macro-storyDate ()
@@ -1473,7 +1577,7 @@ Upload it to the FTP server."
                   ".html")))
       (when (null link-text)
         (setq link-text
-              "<img src=\"{blogToplevel}dailyLinkIcon.png\" alt=\"Daily\">"))
+              "<img src=\"{blogToplevel}dailyLinkIcon.png\" alt=\"Daily\" border=\"0\" />"))
       (concat "<a href=\"{blogToplevel}" file
               "\" title=\"Permanent link to this day: "
               file "\">"
@@ -1604,6 +1708,68 @@ s URL: ")
           (weblog-macro-blogToplevel)
           "bugmenot.png\" border=\"0\" alt=\"BugMeNot\" width=\"16\" height=\"16\">"
           "</a>"))
+
+(defun weblog-macro-bumper (back top-fore top-back top-msg bot-fore bot-back bot-msg)
+  (concat "<span style=\"font-size:250%; font-weight: bold; font-family: sans-serif\">"
+          "<table cellpadding=\"5\">"
+          "<tr><td bgcolor=\"" back "\">"
+          "<table cellpadding=\"5\" cellspacing=\"0\">"
+          "<tr><td bgcolor=\"" top-back "\">"
+          "<span style=\"color: " top-fore "\">"
+          "<center>" top-msg "</center>"
+          "</span></td></tr>"
+          "<tr><td bgcolor=\"" bot-back "\">"
+          "<span style=\"color: " bot-fore "\">"
+          "<center>" bot-msg "</center>"
+          "</span></td></tr>"
+          "</table></span>"
+          "</tr></td>"
+          "</table>"
+          "</span>"))
+
+(defun weblog-macro-wikipedia (&optional entry link)
+  (if (null entry)
+      "<a href=\"http://www.wikipedia.org\">Wikipedia</a>"
+    (concat "<a href=\"http://www.wikipedia.org/"
+             entry "\">"
+            (or link entry)
+            "</a>")))
+
+(defvar *link-story* nil)
+
+(defun weblog-macro-linkNotIndex (name link)
+  (let ((indexp *weblog-making-index-p*))
+    (concat (if indexp "" (concat "<a href=\"" link "\">"))
+            name
+            (if indexp "" "</a>"))))
+
+(defun weblog-macro-applist (name image bloglink applink comments)
+  (concat "<tr><td style=\"text-align: center;\"><a href=\""
+	  applink
+	  "\">"
+	  (if image
+	      (concat "<img src=\"images/"
+		      image
+		      "\" border=\"0\" alt=\""
+		      name
+		      "\" width=\"64\" height=\"64\"/>")
+	    "")
+	  "</a></td>\n"
+	  "<td><a href=\""
+	  applink
+	  "\">"
+	  name
+	  "</a></td>"
+	  "<td>"
+	  (weblog-sharp-link-list bloglink)
+	  comments
+	  "</td></tr>"))
+
+(defun weblog-sharp-link-list (bloglink)
+  (let ((res nil))
+    (dolist (link (if (listp bloglink) bloglink (list bloglink)))
+      (push (concat "<a href=\"" link "\">#</a> ") res))
+    (apply 'concat (nreverse res))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;
@@ -1819,7 +1985,7 @@ Just insert 'text' if the 'file' does not exist in directory 'dir'"
   ;;(interactive)
   (let* ((file (or file-name (buffer-file-name)))
          (dir (file-name-directory file))
-         (files (directory-files *weblog-directory* nil *weblog-file-regexp*)))
+         (files (weblog-directory-files *weblog-directory* nil *weblog-file-regexp* nil (weblog-year-dirs))))
     ;; Incomplete
     ))
     
@@ -1898,9 +2064,9 @@ Just insert 'text' if the 'file' does not exist in directory 'dir'"
   (let* ((file (buffer-file-name))
          (ext (file-name-extension file))
          (dir (file-name-directory file))
-         (weblog-dir (weblog-seek-base-dir dir)))
-    (when (and weblog-dir
-               (equalp ext "txt")
+         (weblog-dir nil))
+    (when (and (equalp ext "txt")
+               (setq weblog-dir (weblog-seek-base-dir dir))
                (let ((len (length weblog-dir)))
                  (and (>= (length dir) len)
                       (equalp weblog-dir
@@ -1921,23 +2087,23 @@ Just insert 'text' if the 'file' does not exist in directory 'dir'"
 (defun weblog-yank-blockquote ()
   "Yank a blockquote section"
   (interactive)
-  (insert "<blockquote>\n")
+  (insert "<blockquote><i>\n")
   (yank)
   (unless (eq (line-beginning-position) (point))
     (insert "\n"))
-  (insert "</blockquote>"))
+  (insert "</i></blockquote>"))
 
 (defun weblog-insert-ellipsis ()
   (interactive)
-  (insert "<br>
-<br>
-...<br>
-<br>
+  (insert "<br/>
+<br/>
+...<br/>
+<br/>
 "))
 
 (defun weblog-insert-break ()
   (interactive)
-  (insert "<br>"))
+  (insert "<br/>"))
 
 (defun weblog-italicize-word ()
   (interactive)
@@ -1945,8 +2111,23 @@ Just insert 'text' if the 'file' does not exist in directory 'dir'"
   (forward-word 1)
   (insert "</i>"))
 
+(defun weblog-yank-centered-image ()
+  "Yank a centered image tag"
+  (interactive)
+  (insert "<p style=\"text-align: center;\">\n<img src=\"images/")
+  (yank)
+  (insert "\" alt=\"")
+  (yank)
+  (insert "\" width=\"128\" height=\"128\"/></p>\n")
+  (backward-char 32))
+
 ;; Set weblog-file on file open if appropriate
-(pushnew 'weblog-set-buffer-mode find-file-hooks)
+(macrolet ((add-find-file-hook (x)
+	     (if (get 'find-file-hooks 'byte-obsolete-variable)
+		 `(pushnew ,x find-file-hook)
+	       ;; find-file-hooks is obsolete as of Emacs 22.1
+	       `(pushnew ,x find-file-hooks))))
+  (add-find-file-hook 'weblog-set-buffer-mode))
 (define-key weblog-mode-map "\M-]" 'weblog-insert-source-key)
 (define-key weblog-mode-map "\M-}" 'weblog-insert-shortcut)
 (define-key weblog-mode-map "\M-!" 'weblog-insert-comment)
@@ -1955,6 +2136,7 @@ Just insert 'text' if the 'file' does not exist in directory 'dir'"
 (define-key weblog-mode-map "\C-x\C-i" 'weblog-upload-index)
 (define-key weblog-mode-map "\C-\M-a" 'weblog-yank-link)
 (define-key weblog-mode-map "\C-\M-u" 'weblog-yank-blockquote)
+(define-key weblog-mode-map "\C-\M-i" 'weblog-yank-centered-image)
 (define-key weblog-mode-map "\C-x\M-s" 'weblog-upload)
 (define-key weblog-mode-map "\C-x\M-." 'weblog-insert-ellipsis)
 (define-key weblog-mode-map "\C-\M-r" 'weblog-insert-break)
