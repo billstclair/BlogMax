@@ -1,0 +1,109 @@
+<html>
+<head>
+<title>BlogMax: Blogging in Emacs - RSS</title>
+</head>
+<body>
+<font size="+3"><b>
+<a href="../index.html">
+BlogMax: Blogging in Emacs</a></b></font><br>
+<i>A great way to maintain a blog</i>
+<table width="99%">
+<tr><td align="right" valign="top">
+<!--Side Links-->
+<b>
+<a href="../index.html">Home</a>
+<p>
+<a href="license.html">License</a>
+<p>
+<a href="../../blogmax.zip">Download</a>
+<p>
+<a href="index.html">Docs</a>
+<p>
+<a href="blogs.html">Blogs</a>
+</b>
+</td>
+<td width="10px">&nbsp;</td>
+<td width="1" bgcolor="gray"></td>
+<td width="10px">&nbsp;</td>
+<td valign="top" width="99%">
+<table width="99%">
+<tr>
+<td bgcolor="black">
+<font size="+1" color="#f8f0ff">
+<b>RSS</b>
+</font>
+</td>
+</tr>
+</table>
+<!--RSS-->
+<font size="-1">
+<a href="macros.html">Macros</a> |
+<a href="index.html">Contents</a> |
+<a href="definemacros.html">Defining New Macros</a>
+</font>
+<p>
+This page tells you how to configure the template for creating RSS for
+your site. RSS is a news syndication standard. BlogMax creates RSS
+that is similar to that created by
+<a href="http://radio.userland.com/">
+Radio Userland</a>. By my limited understanding, this is not quite up
+to the standard, but it appears to work.
+<p>
+Copy the
+<a href="../rss-template.xml">
+rss-template.xml</a> file from this site to your site's root
+directory, and edit it to describe your site. Here's that file:
+<blockquote>
+<pre>&lt;?xml version="1.0"?&gt;
+&lt;rss version="0.91"&gt;
+  &lt;channel&gt;
+    &lt;!-- You need to customize this information --&gt;
+    &lt;title&gt;weblog.el: Blogging in Emacs&lt;/title&gt;
+    &lt;link&gt;http://billstclair.com/weblog.el/&lt;/link&gt;
+    &lt;description&gt;A wonderful tool for maintaining a weblog&lt;/description&gt;
+    &lt;language&gt;en-us&lt;/language&gt;
+    &lt;docs&gt;http://billstclair.com/weblog.el/&lt;/docs&gt;
+    &lt;managingEditor&gt;bill@billstclair.com&lt;/managingEditor&gt;
+    &lt;webMaster&gt;bill@billstclair.com&lt;/webMaster&gt;
+    &lt;!-- These are just examples. They will be filled in on generation --&gt;
+    &lt;pubDate&gt;Thu, 31 May 2001 04:00:00 GMT&lt;/pubDate&gt;
+    &lt;lastBuildDate&gt;Thu, 31 May 2001 17:18:53 GMT&lt;/lastBuildDate&gt;
+    &lt;item&gt;
+      &lt;!-- The items are all automatically generated. Don't change this --&gt;
+      &lt;title&gt;blogmax.el&lt;/title&gt;
+      &lt;link&gt;http://billstclair.com/blogmax/blogmax.el&lt;/link&gt;
+      &lt;description&gt;I maintain my weblogs with blogmax.el&lt;/description&gt;
+    &lt;/item&gt;
+  &lt;/channel&gt;
+&lt;/rss&gt;
+</pre>
+</blockquote>
+The part that you edit
+is the text of the tags below the comment, "You need to customize this
+information". BlogMax will fill in the "pubDate", "lastBuildDate", and
+"item" tag information when it generates RSS. Currently, no
+macro expansion is done during RSS file creation. I'll likely change
+this at some point to allow for creation of different versions of RSS.
+<p>
+<font size="-1">
+<a href="macros.html">Macros</a> |
+<a href="index.html">Contents</a> |
+<a href="definemacros.html">Defining New Macros</a>
+</font>
+<p>
+
+</td></tr>
+</table>
+<hr size="1" noshade>
+<table width="99%" cellspacing="0" cellpadding="2" border="0">
+<tr><td>
+<a href="http://www.gnu.org/software/emacs/">
+<img src="../emacs.png" alt="emacs" align="left"></a>
+Copyright &copy; 2001 by Bill St. Clair
+&lt;<a href="mailto:bill@billstclair.com">bill@billstclair.com</a>&gt;
+</td><td align="right">
+<a href="rss.txt">source</a>
+</td></tr>
+</table>
+</body>
+</html>

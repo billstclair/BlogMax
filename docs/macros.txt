@@ -1,0 +1,200 @@
+<!--Macros-->
+<font size="-1">
+<a href="templates.html">Templates</a> |
+<a href="index.html">Contents</a> |
+<a href="rss.html">RSS</a>
+</font>
+
+This page documents the macros you can use on your pages. If you know
+Emacs lisp, you can easily
+<a href="definemacros.html">
+define new macros</a>, but this page just tells you how to use the
+ones I've thought of so far.
+
+Macros are invoked by including their name and parameters between
+curly brackets. For example \{calendar} inserts a calendar (only
+useful on a top-level weblog page). Macros can expand into text that
+includes another macro. It will work the way you expect it to. Macros,
+however, are NOT expanded in the arguments to a macro.
+
+If you want to insert a curly bracket or a backslash in the text,
+escape it with a backslash. For example, to make "\{calendar}" appear
+in the paragraph above (and this one) instead of a calendar, I had to
+type "\\\{calendar}".
+
+There are two special "macros":
+
+\{@<i>shortcut</i>} is replaced by the value of the shortcut named
+<i>shortcut</i>. If there is no such shortcut, the substitution
+doesn't happen.
+
+\{=forms...} read's and eval's the lisp list (forms...) and princ's it
+into the buffer replacing the macro call. If an error happens, no
+replacement happens. Eventually, I may put the error message and stack
+backtrace in the buffer, but I haven't needed it yet. In order to get
+the value of a variable, use the identity function. For example,
+"\{identity *weblog-story-file*}" becomes "{=identity
+*weblog-story-file*}" on my machine.
+
+Note that the open and close curly bracket need to be on the same line
+in order for BlogMax to interpret this as denoting a macro call.
+
+\{<i>macro</i> args...} read's and eval's the lisp list
+(weblog-macro-<i>macro</i> args...) and princ's it into the buffer
+replacing the macro call. Again, if an error happens, the replacement
+is skipped. Some macros have no arguments. Some have optional
+arguments. Just like the lisp functions defining them.
+
+The following are the macros currently defined by {@blogmax.el}:
+
+<b>\{contentTemplate}</b><br>
+Insert the contents of the content template file. This is
+"content-template.tmpl" for a file in the weblog directory or
+"story-template.tmpl" for a file in a sub-directory.
+
+<b>\{dayTemplate}</b><br>
+Insert the contents of the day template file. This is
+"day-template.tmpl".
+
+<b>\{storyContent}</b><br>
+Insert the contents of the buffer that was current when the outermost
+interactive BlogMax command ran. I.e. the contents of your ".txt"
+file.
+
+<b>\{title}</b><br>
+Insert the story title. This is the text of the HTML comment at the
+beginning of the ".txt" file, if there is one.
+
+<b>\{siteName}</b><br>
+Insert the site name, from the {@weblog.ini} file.
+
+<b>\{byline}</b><br>
+Insert the byline, from the {@weblog.ini} file.
+
+<b>\{author}</b><br>
+Insert the author, from the {@weblog.ini} file.
+
+<b>\{email}</b><br>
+Insert the email address, from the {@weblog.ini} file.
+
+<b>\{url}</b><br>
+Insert the site's URL, from the {@weblog.ini} file.
+
+<b>\{lastUpdate}</b><br>
+Insert the mod time of the ".txt" file, formatted the way I like it.
+
+<b>\{calendar}</b><br> Insert a calendar. This is only useful for day
+pages (or in the "content-template.tmpl" file). It inserts a nice
+calendar with links for days that have a day file. It won't create
+links for days in the future. This allows you to stage future stories
+without letting people get to them until the day comes. Dave Winer
+added quite a few ways to customize the calendar. I'll probably end up
+doing that too, but for now it's the way I like it.
+
+The calendar macro takes two optional arguments: <code>file</code>
+and <code>start-day</code>. <code>file</code> defaults to the current
+weblog story file. You will rarely if ever need to specify it. Use
+<code>nil</code> to get the default. <code>start-day</code> is the day
+of the week for the first column of the calendar. 0 is Sunday, 1 is
+Monday, ..., 6 is Saturday. The default is 0, Sunday. Hence to put in
+a calendar starting on Monday, you would place the following in one of
+your template files:
+<blockquote>
+<code>\{calendar nil 1}</code>
+</blockquote>
+
+<b>{storyDate}</b><br>
+The date of the current day file, formatted like "Monday, June 4,
+2001". Europoeans will probably want to change this or ask me to make
+it a parameter in the {@weblog.ini} file.
+
+<b>{blogToplevel &amp;optional dir}</b><br>
+Insert a relative pathname from the current directory to DIR, or, if
+DIR is not specified, to the weblog directory. This is useful in
+shortcuts and templates to make them directory-independent. For
+example, if I want to reference the file "macros.tml" in the "stories"
+sub-directory of the weblog directory (this file), I would type
+\{blogToplevel "stories/"}macros.html. The quotes and the trailing
+slash are necessary.
+
+<b>\{dailyLink}</b><br>
+Insert a link to the current story. This is mostly useful in day
+files, so that people can easily get the current link from one of the
+days in the top-level index.
+
+<b>\{pl "name"}</b><br>
+Inserts a "permalink" into the file with the given <i>name</i>. The
+text of the link comes from the "pl-macro-text" parameter in
+weblog.ini. It defaults to the sharp character ("#") if there is no
+such parameter. For example, the following text:
+<blockquote>
+\{pl "foo"}
+</blockquote>
+expands into:
+<blockquote>
+&lt;a name="foo">&lt;a href="#foo">#&lt;/a>&lt;/a>
+</blockquote>
+The macro does the right thing in the index and RSS files, referencing
+the day file. For example, if today's source file is 040103.txt, then
+the macro above will expand into the following in today's index.html:
+<blockquote>
+&lt;a href="040103.html#foo">#&lt;/a>
+</blockquote>
+C-M-L inserts <code>\{pl ""}</code> in the buffer and puts the
+insertion point between the two double-quotes.
+
+<b>\{year}</b><br>
+The year that the current buffer's file was last modified. Useful for
+copyrights.
+
+<b>\{img name &amp;optional alignment}</b><br>
+Inserts an "img" tag from a shortcut and optionally modifies it with
+an alignment. For example, if the shortcut "billstclair" had a value
+of &lt;img src="mymug.jpg">, which it doesn't, then the following:
+<blockquote>
+\{img "billstclair" "right"}
+</blockquote>
+would become:
+<blockquote>
+&lt;img src="mymug.jpg" align="right">
+</blockquote>
+The alignment is inserted just before the first greater-than sign
+after the first instance of "&lt;img" in the shortcut's value.
+
+<b>\{include file &amp;optional neuter pre}</b><br>
+Include FILE, from the same directory as the current buffer's file. If
+NEUTER is true, change characters that would confuse HTML into the
+corresponding entities. If PRE is true, add a space at the beginning
+of blank lines to prevent them from being turned into paragraph
+tags. Hence, the following:
+<blockquote>
+\{include "../content-template.tmpl" t t}
+</blockquote>
+becomes:
+<blockquote>
+{include "../content-template.tmpl" t t}
+</blockquote>
+
+<b>\{txtLink &amp;optional link-text}</b><br>
+Generate a link to the source ".txt" file, using that file's name unless
+link-text is specified.
+
+<b>\{bugmenot domain}</b><br>
+Generates a link to a
+<a href="http://www.bugmenot.com/">
+BugMeNot</a> database lookup for the given <i>domain</i>. For example,
+<code>\{bugmenot "www.nytimes.com"}</code> generates:
+{bugmenot "www.nytimes.com"} (click the red circle-slash see what I'm
+talking about). The circle-slash icon,
+<a href="../bugmenot.png">
+<code>bugmenot.png</a>, must be in your weblog directory. You can
+enable automatic generation of BugMeNot links by uncommenting and
+augmenting the <code>bugmenot-auto-list</code> in your
+<a href="weblogini.html">
+<code>weblog.ini</code></a> file.
+
+<font size="-1">
+<a href="templates.html">Templates</a> |
+<a href="index.html">Contents</a> |
+<a href="rss.html">RSS</a>
+</font>

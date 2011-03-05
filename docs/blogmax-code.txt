@@ -1,0 +1,19 @@
+<!--BlogMax Code-->
+<font size="-1">
+<a href="dayinthelife.html">A Day in the Life of a BlogMax Web Site</a> |
+<a href="index.html">Contents</a>
+</font>
+
+Here's a web-readable version of
+<a href="../blogmax.el">
+blogmax.el</a>. The text for this page is:
+<blockquote>
+{include "blogmax-code.txt" t t}
+</blockquote>
+<hr>
+{include "../blogmax.el" t t}
+
+<font size="-1">
+<a href="dayinthelife.html">A Day in the Life of a BlogMax Web Site</a> |
+<a href="index.html">Contents</a>
+</font>

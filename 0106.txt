@@ -1,0 +1,43 @@
+<!--June 2001-->
+<a href="0105.html">May</a> | <b>June 2001</b> | <a href="0107.html">July</a>
+<p>
+<a href="010601.html">Friday, 1 June</a>: An Example Blog
+<ul>
+<li><a href="../blogmax.zip">
+Download</a>
+<a href="docs/index.html">
+Docs</a>
+</ul>
+<a href="010605.html">Tuesday, 5 June</a>: Testing in Linux
+<ul>
+</ul>
+<a href="010606.html">Wednesday, 6 June</a>: BlogMax 0.9
+<ul>
+</ul>
+<a href="010607.html">Thursday, 7 June</a>: Freshmeat Announcement
+<ul>
+<li><a href="http://freshmeat.net/projects/blogmax/">
+freshmeat.net/projects/blogmax/</a>
+</ul>
+<a href="010609.html">Saturday, 9 June</a>: More Docs
+<ul>
+<li>I added three new
+<a href="docs/index.html">
+docs</a>
+<a href="docs/install.html">
+Installation</a>
+<a href="docs/rss.html">
+RSS</a>
+<a href="docs/dayinthelife.html">
+A Day in the Life of a BlogMax Web Site</a>
+</ul>
+<a href="010612.html">Tuesday, 12 June</a>: Feedreader Compatible RSS
+<ul>
+<li><a href="http://www.feedreader.com/">
+Feedreader</a>
+<a href="rss-template.xml">
+rss-template.xml</a>
+</ul>
+
+<p>
+<a href="0105.html">May</a> | <b>June 2001</b> | <a href="0107.html">July</a>

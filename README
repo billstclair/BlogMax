@@ -1,0 +1,7 @@
+BlogMax is an Emacs major-mode for maintaining a weblog. It lets you
+focus on the text of your web site, while wrapping a template that you
+define around each page.
+
+I haven't worked on BlogMax for over 3 years. I'm putting it on GitHub
+to make it easier for others to fork and propose changes to this
+central repository.

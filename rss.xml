@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<rss version="0.91">
+  <channel>
+    <!-- You need to customize this information -->
+    <title>weblog.el: Blogging in Emacs</title>
+    <link>http://billstclair.com/weblog.el/</link>
+    <description>A wonderful tool for maintaining a weblog</description>
+    <language>en-us</language>
+    <docs>http://billstclair.com/weblog.el/</docs>
+    <managingEditor>bill@billstclair.com</managingEditor>
+    <webMaster>bill@billstclair.com</webMaster>
+    <!-- These are just examples. They will be filled in on generation -->
+    <pubDate>Sat, 05 Mar 2011 13:39:39 GMT</pubDate>
+    <lastBuildDate>Sat, 05 Mar 2011 13:39:39 GMT</lastBuildDate>
+   
+    <item>
+      <title>github.com/BlogMax</title>
+      <link>http://billstclair.com/blogmax/https://github.com/billstclair/BlogMax</link>
+      <guid isPermaLink="true">http://billstclair.com/blogmax/https://github.com/billstclair/BlogMax</guid>
+      <description>&lt;!--BlogMax is on GitHub--&gt; 
+As you have noticed if you're following this blog, I haven't made any 
+changes to BlogMax in a long, long time. Actually, I made a few 
+changes up through February of 2007, when I was blogging at 
+imacpr0n.com (now defunct), so today I merged those into the main 
+source, and I pushed the whole thing to 
+&lt;a href="http://billstclair.com/blogmax/https://github.com/billstclair/BlogMax"&gt; 
+github.com/BlogMax&lt;/a&gt;. It's 
+&lt;a href="http://billstclair.com/blogmax/docs/license.html"&gt; 
+GPL licensed&lt;/a&gt;, so you're free to fork and make any changes you 
+want, as long as they remain free. If you DO make changes, please let 
+me know, so I can consider pulling them back into the main repository. 
+      </description>
+    </item>
+  </channel>
+</rss>

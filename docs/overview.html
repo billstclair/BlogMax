@@ -1,0 +1,127 @@
+<html>
+<head>
+<title>BlogMax: Blogging in Emacs - Overview</title>
+</head>
+<body>
+<font size="+3"><b>
+<a href="../index.html">
+BlogMax: Blogging in Emacs</a></b></font><br>
+<i>A great way to maintain a blog</i>
+<table width="99%">
+<tr><td align="right" valign="top">
+<!--Side Links-->
+<b>
+<a href="../index.html">Home</a>
+<p>
+<a href="license.html">License</a>
+<p>
+<a href="../../blogmax.zip">Download</a>
+<p>
+<a href="index.html">Docs</a>
+<p>
+<a href="blogs.html">Blogs</a>
+</b>
+</td>
+<td width="10px">&nbsp;</td>
+<td width="1" bgcolor="gray"></td>
+<td width="10px">&nbsp;</td>
+<td valign="top" width="99%">
+<table width="99%">
+<tr>
+<td bgcolor="black">
+<font size="+1" color="#f8f0ff">
+<b>Overview</b>
+</font>
+</td>
+</tr>
+</table>
+<!--Overview-->
+<font size="-1">
+<a href="index.html">Contents</a> |
+<a href="install.html">Installation</a>
+</font>
+<p>
+BlogMax extends the power of <a href="http://www.gnu.org/software/emacs/">Emacs</a> to ease the maintenance of a
+weblog, a frequently updated web site containing links and commentary.
+<p>
+The name BlogMax is a combination of Blog and <a href="http://www.gnu.org/software/emacs/">Emacs</a> with a curtsy
+in the general direction of
+<a href="http://www.newsmax.com/">
+NewsMax</a>. If you don't use Emacs, but you do a blog,
+it might be worth your while to learn Emacs just so you can use
+BlogMax. And yes, I sometimes have other illusions of grandeur.
+<p>
+BlogMax is loosely patterned after <a href="http://www.scripting.com/">Dave Winer</a>'s <a href="http://manila.userland.com/">Manila</a>. My
+weblog, <a href="http://billstclair.com/blog/">End the War on Freedom</a>, started life as a
+<a href="http://wws.editthispage.com/">
+Manila site</a> at <a href="http://www.editthispage.com">EditThisPage.com</a>. Many thanks to Dave and
+company for creating Manila and making it available to the world via
+EditThisPage.com and other sites.
+<p>
+I have tested BlogMax in Emacs 20.3.1 on Windoze, a couple of Emacs
+versions on a couple of Linux installations, and XEmacs 21.1 on RedHat
+7.1 (<a href="http://www.vmware.com/">VMWare</a> rocks!). If you fix
+problems with it or add neat new features, send them on over and I'll
+consider adding them (in my copious spare time).
+<p>
+BlogMax turns stylized HTML stored in text files into complete
+HTML. The following conversions are provided:
+<ul>
+<li>Templates are wrapped around the text. These usually provide the
+basic starting and ending HTML tags
+(<code>&lt;html>&lt;head>&lt;title>&lt;/title>&lt;/head>&lt;body>&lt;/body>&lt;/html></code>),
+and the basic look of your site. Your text files usually fill in the
+body. See the <a href="templates.html">Templates</a> page for more
+details.
+<li>Blank lines are turned into paragraph tags
+(<code>&lt;p></code>).
+<li>A number of macros are provided to make typing easier or do useful
+computations. One macro, <code>{@<i>shortcut</i>}</code> provides for
+pasting in of shortcuts that are remembered in a file. For example, I
+typed "<code>{@manila}</code>" to create this <a href="http://manila.userland.com/">Manila</a>
+link. Shortcuts are usually used to give a short name to a link, but
+they can be used to abbreviate any text you want. Macros are expanded
+recursively, so a shortcut can include a macro or another
+shortcut. See the
+<a href="macros.html">
+Macros</a> page for more details.
+<li>It's easy to create a page for each day and link them together
+via a calendar. You can publish the last N day's pages on your site's
+index page.
+<li>There is a Weblog mode, based on HTML mode, that is automatically
+enabled when you open a text file in your weblog's directory or one of
+its subdirectories. Saving a text page with <code>C-x C-s</code>
+automatically generates its HTML. There are other keys in Weblog mode
+to simplify other operations, for example <code>C-x C-i</code> creates
+an index page, an RSS file, and optionally regenerates all of this
+month's pages (to update their calendars to include the new day). See
+the
+<a href="mode.html">
+Weblog mode</a> page for more details.
+<li>I haven't yet made email or web page addresses automagically turn
+into links to themselves. Manila does this, but I don't use it often
+enough to spend the effort. If you really want it, do it, and I'll
+likely include your code.
+</ul>
+<p>
+<font size="-1">
+<a href="index.html">Contents</a> |
+<a href="install.html">Installation</a>
+</font>
+<p>
+
+</td></tr>
+</table>
+<hr size="1" noshade>
+<table width="99%" cellspacing="0" cellpadding="2" border="0">
+<tr><td>
+<a href="http://www.gnu.org/software/emacs/">
+<img src="../emacs.png" alt="emacs" align="left"></a>
+Copyright &copy; 2002 by Bill St. Clair
+&lt;<a href="mailto:bill@billstclair.com">bill@billstclair.com</a>&gt;
+</td><td align="right">
+<a href="overview.txt">source</a>
+</td></tr>
+</table>
+</body>
+</html>

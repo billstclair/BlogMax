@@ -1,0 +1,14 @@
+<!--Some bug fixes-->
+I've made a few small bug fixes and feature additions since my last
+entry:
+<ul>
+<li>The month index code should now correctly update last month's
+index on the first day of the month.
+<li>Some common 8-bit characters are mapped to seven-bit. You can
+extend this by changing *weblog-char-map*
+<li>The RSS items no longer include a title or a link. Just the text
+with whatever links are in it.
+<li>The \{jargon} macro is updated for ESR's new directory
+structure.
+<li>C-M-R inserts "&lt;br>"
+</ul>

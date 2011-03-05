@@ -1,0 +1,3 @@
+<!--A Bogus Day-->
+This day is here just to show how a previous day looks with this day
+template and to add a link to the calendar.

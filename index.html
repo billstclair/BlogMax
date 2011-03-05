@@ -1,77 +1,424 @@
-<!DOCTYPE html>
 <html>
 <head>
-  <meta charset='utf-8'>
-
-  <title>billstclair/BlogMax @ GitHub</title>
-
-  <style type="text/css">
-    body {
-      margin-top: 1.0em;
-      background-color: #952a51;
-      font-family: "Helvetica,Arial,FreeSans";
-      color: #ffffff;
-    }
-    #container {
-      margin: 0 auto;
-      width: 700px;
-    }
-    h1 { font-size: 3.8em; color: #6ad5ae; margin-bottom: 3px; }
-    h1 .small { font-size: 0.4em; }
-    h1 a { text-decoration: none }
-    h2 { font-size: 1.5em; color: #6ad5ae; }
-    h3 { text-align: center; color: #6ad5ae; }
-    a { color: #6ad5ae; }
-    .description { font-size: 1.2em; margin-bottom: 30px; margin-top: 30px; font-style: italic;}
-    .download { float: right; }
-    pre { background: #000; color: #fff; padding: 15px;}
-    hr { border: 0; width: 80%; border-bottom: 1px solid #aaa}
-    .footer { text-align:center; padding-top:30px; font-style: italic; }
-  </style>
+<title>BlogMax: Blogging in Emacs - BlogMax is on GitHub</title>
 </head>
-
 <body>
-  <a href="http://github.com/billstclair/BlogMax"><img style="position: absolute; top: 0; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub" /></a>
+<font size="+3"><b>
+<a href="index.html">
+BlogMax: Blogging in Emacs</a></b></font><br>
+<i>A great way to maintain a blog</i>
+<table width="99%">
+<tr><td align="right" valign="top">
+<!--Side Links-->
+<b>
+<a href="index.html">Home</a>
+<p>
+<a href="docs/license.html">License</a>
+<p>
+<a href="../blogmax.zip">Download</a>
+<p>
+<a href="docs/index.html">Docs</a>
+<p>
+<a href="docs/blogs.html">Blogs</a>
+</b>
+</td>
+<td width="10px">&nbsp;</td>
+<td width="1" bgcolor="gray"></td>
+<td width="10px">&nbsp;</td>
+<td valign="top" width="99%">
+BlogMax is an Emacs package that aids in the creation of a
+weblog. News below. See the
+<a href="docs/index.html">Docs</a> page
+for details.
+<p>
+<table width="99%" cellspacing="0" border="0">
+<tr>
+<td bgcolor="black">
+<font size="+1" color="#f8f0ff">
+<b>BlogMax is on GitHub</b>
+</font>
+</td>
+<td bgcolor="black" align="right" valign="middle">
+<a href="110305.html" title="Permanent link to this day: 110305.html"><img src="dailyLinkIcon.png" alt="Daily" border="0" /></a>
+</td>
+</tr>
+</table>
+<b>Saturday, March 5, 2011</b><p>
+<!--BlogMax is on GitHub-->
+As you have noticed if you're following this blog, I haven't made any
+changes to BlogMax in a long, long time. Actually, I made a few
+changes up through February of 2007, when I was blogging at
+imacpr0n.com (now defunct), so today I merged those into the main
+source, and I pushed the whole thing to
+<a href="https://github.com/billstclair/BlogMax">
+github.com/BlogMax</a>. It's
+<a href="docs/license.html">
+GPL licensed</a>, so you're free to fork and make any changes you
+want, as long as they remain free. If you DO make changes, please let
+me know, so I can consider pulling them back into the main repository.
+<p>
+<p>
+<table width="99%" cellspacing="0" border="0">
+<tr>
+<td bgcolor="black">
+<font size="+1" color="#f8f0ff">
+<b>Feed on Feeds & Wikipedia</b>
+</font>
+</td>
+<td bgcolor="black" align="right" valign="middle">
+<a href="041208.html" title="Permanent link to this day: 041208.html"><img src="dailyLinkIcon.png" alt="Daily" border="0" /></a>
+</td>
+</tr>
+</table>
+<b>Wednesday, December 8, 2004</b><p>
+<!--Feed on Feeds & Wikipedia-->
+<a href="041208.html#rss" title="Permalink">#</a>
+I made the RSS generator create a kludgey <code>&lt;guid></code> tag
+for each <code>&lt;item></code>. The GUID is the date followed by the
+index of the entry in the RSS file, meaning that it will change every
+time you generate RSS. So it's not good for sites that change more
+than once a day. It does, however, cause Steve Minutillo's
+<a href="http://minutillo.com/steve/feedonfeeds/">
+Feed on Feeds</a> to notice all the items instead of just the first
+item the first time you update.
+<p>
+<a href="041208.html#simmons" title="Permalink">#</a>
+Shane Simmons donated a Wikipedia macro:
+<ul>
+<li><code>{wikipedia}</code> becomes <a href="http://www.wikipedia.org">Wikipedia</a>
+<li><code>{wikipedia "Anarchism"}</code> becomes <a href="http://www.wikipedia.org/Anarchism">Anarchism</a>
+<li><code>{wikipedia "Anarchism" "There's no government like no government"}</code> becomes
+<a href="http://www.wikipedia.org/Anarchism">There's no government like no government</a>
+</ul>
+<p>
+I didn't bother to generate a new zip file. Just download
+<a href="blogmax.el">
+<code>blogmax.el</code></a> and
+<a href="rss-template.xml">
+<code>rss-template.xml</code></a>, then <code>byte-compile-file</code>
+<code>blogmax.el</code> or download
+<a href="blogmax.elc">
+<code>blogmax.elc</code></a>.
+<p>
+<p>
+<table width="99%" cellspacing="0" border="0">
+<tr>
+<td bgcolor="black">
+<font size="+1" color="#f8f0ff">
+<b>BugMeNot</b>
+</font>
+</td>
+<td bgcolor="black" align="right" valign="middle">
+<a href="040904.html" title="Permanent link to this day: 040904.html"><img src="dailyLinkIcon.png" alt="Daily" border="0" /></a>
+</td>
+</tr>
+</table>
+<b>Saturday, September 4, 2004</b><p>
+<!--BugMeNot-->
+<a href="040904.html#bugmenot" title="Permalink">#</a>
+I added support for
+<a href="http://www.bugmenot.com/">
+BugMeNot</a> links. BugMeNot is a database of userid/password pairs
+for web sites that require them, e.g. The
+<a href="http://www.nytimes.com">
+New York Times</a> and The
+<a href="http://www.washingtonpost.com/">
+Washington Post</a>. A BugMeNot link to a web site is generated by the
+"<code>bugmenot</code>" macro. For example, <code>{bugmenot
+"www.nytimes.com"}</code> generates: <a href="http://www.bugmenot.com/view.php?url=www.nytimes.com"><img src="bugmenot.png" border="0" alt="BugMeNot" width="16" height="16"></a>. (Click the
+red circle-slash to see the userid/password for the Times). You need
+to put
+<a href="bugmenot.png">
+<code>bugmenot.png</code></a> in your weblog directory if you want
+your readers to see the circle-slash image. You can choose to create
+these links yourself, or you can add domains to the
+<code>bugmenot-auto-list</code> in the
+<a href="weblog.ini">
+<code>weblog.ini</code></a> file, and then any properly formatted link
+to any site in the list will be followed by a BugMeNot link. A
+properly formatted link is of the form
+<code>&lt;a&nbsp;href="http://</code><i>domain</i><code>/...&lt;/a></code>,
+where there is exactly one space between the "<code>a</code>" and the
+"<code>href=</code>", and a suffix of the <i>domain</i> is in the
+<code>bugmenot-auto-list</code>.
+<p>
+<a href="040904.html#rfc822" title="Permalink">#</a>
+Thanks to m3m, whose full name I don't remember, the time strings in
+RSS files are now RFC 822 compliant.
+<p>
+<a href="040904.html#plkeystroke" title="Permalink">#</a>
+C-M-L now inserts a permalink, <code>{pl ""}</code>, in the buffer
+and puts the insertion point between the two double quotes. That's how
+I generated the #-sign links at the beginnings of the paragraphs in
+this file. The permalinks are now properly rendered in the RSS
+file. They used to link to the index page. Now they link to the day
+page.
+<p>
+<p>
+<table width="99%" cellspacing="0" border="0">
+<tr>
+<td bgcolor="black">
+<font size="+1" color="#f8f0ff">
+<b>"Permalink" macro</b>
+</font>
+</td>
+<td bgcolor="black" align="right" valign="middle">
+<a href="040103.html" title="Permanent link to this day: 040103.html"><img src="dailyLinkIcon.png" alt="Daily" border="0" /></a>
+</td>
+</tr>
+</table>
+<b>Saturday, January 3, 2004</b><p>
+<!--"Permalink" macro-->
+<a href="040103.html#permalink" title="Permalink">#</a>
+I added a "Permalink" macro. {pl "name"} inserts a name tag enclosing a
+link to that name tag with text taken from
+the new "pl-macro-text" parameter in
+<a href="docs/weblogini.html">
+weblog.ini</a>. The text defaults to the sharp sign ("#") if
+there is no such parameter in weblog.ini. Click the "source" in the
+lower-right-hand corner of the page to see it in action.
+<p>
+<a href="040103.html#another" title="Permalink">#</a>
+Here's another bogus entry just so you can play with the
+permalinks. I'm including an excerpt from the
+<a href="http://billstclair.com/usdocs/declaration.html">
+Declaration of Independence</a> here just to make this entry long
+enough so that clicking on its permalink will scroll to it.
+<blockquote>
+When in the Course of human events, it becomes necessary for one
+people to dissolve the political bands which have connected them with
+another, and to assume among the powers of the earth, the separate and
+equal station to which the Laws of Nature and of Nature's God entitle
+them, a decent respect to the opinions of mankind requires that they
+should declare the causes which impel them to the separation.<br>
+<br>
+We hold these truths to be self-evident, that all men are created
+equal, that they are endowed by their Creator with certain unalienable
+Rights, that among these are Life, Liberty and the pursuit of
+Happiness.--That to secure these rights, Governments are instituted
+among Men, deriving their just powers from the consent of the
+governed, --That whenever any Form of Government becomes destructive
+of these ends, it is the Right of the People to alter or to abolish
+it, and to institute new Government, laying its foundation on such
+principles and organizing its powers in such form, as to them shall
+seem most likely to effect their Safety and Happiness. Prudence,
+indeed, will dictate that Governments long established should not be
+changed for light and transient causes; and accordingly all experience
+hath shewn, that mankind are more disposed to suffer, while evils are
+sufferable, than to right themselves by abolishing the forms to which
+they are accustomed. But when a long train of abuses and usurpations,
+pursuing invariably the same Object evinces a design to reduce them
+under absolute Despotism, it is their right, it is their duty, to
+throw off such Government, and to provide new Guards for their future
+security.--Such has been the patient sufferance of these Colonies; and
+such is now the necessity which constrains them to alter their former
+Systems of Government. The history of the present King of Great
+Britain is a history of repeated injuries and usurpations, all having
+in direct object the establishment of an absolute Tyranny over these
+States. To prove this, let Facts be submitted to a candid world.
+</blockquote>
+<p>
+<p>
+<table width="99%" cellspacing="0" border="0">
+<tr>
+<td bgcolor="black">
+<font size="+1" color="#f8f0ff">
+<b>Some bug fixes</b>
+</font>
+</td>
+<td bgcolor="black" align="right" valign="middle">
+<a href="030602.html" title="Permanent link to this day: 030602.html"><img src="dailyLinkIcon.png" alt="Daily" border="0" /></a>
+</td>
+</tr>
+</table>
+<b>Monday, June 2, 2003</b><p>
+<!--Some bug fixes-->
+I've made a few small bug fixes and feature additions since my last
+entry:
+<ul>
+<li>The month index code should now correctly update last month's
+index on the first day of the month.
+<li>Some common 8-bit characters are mapped to seven-bit. You can
+extend this by changing *weblog-char-map*
+<li>The RSS items no longer include a title or a link. Just the text
+with whatever links are in it.
+<li>The {jargon} macro is updated for ESR's new directory
+structure.
+<li>C-M-R inserts "&lt;br>"
+</ul>
+<p>
+<table width="99%" cellspacing="0" border="0">
+<tr>
+<td bgcolor="black">
+<font size="+1" color="#f8f0ff">
+<b>Improving RSS</b>
+</font>
+</td>
+<td bgcolor="black" align="right" valign="middle">
+<a href="021008.html" title="Permanent link to this day: 021008.html"><img src="dailyLinkIcon.png" alt="Daily" border="0" /></a>
+</td>
+</tr>
+</table>
+<b>Tuesday, October 8, 2002</b><p>
+<!--Improving RSS-->
+I've been using
+<a href="http://www.disobey.com/amphetadesk/">
+amphetaDesk</a> to scan RSS channels. The RSS that BlogMax generates
+looks funny there. The main link appears twice. I've been thinking
+about some ideas to improve the RSS and get rid of the need to use
+&lt;br> tags for paragraph breaks within an entry. I think I know what
+to do now.
+<p>
+I'll add two new macros, <code>{story link title name}</code> and
+<code>{/story}</code>. The RSS generation will include only the text
+between the two new macros (using the old algorithm for backward
+compatibility on pages that contain no instance of the
+<code>{story}</code> macro).
+<p>
+<code>{story link title name}</code> will expand into:
+<blockquote>
+<code>&lt;!--story-->&lt;a href=link name=name>title&lt;/a></code>
+</blockquote>
+<code>{/story}</code> will expand into:
+<blockquote>
+<code>&lt;!--/story--></code>
+</blockquote>
+The weblog-insert-story-tags command, likely bound to
+&lt;Ctrl>&lt;Shift>-S, will insert:
+<blockquote>
+<code>{story ...}{/story}</code>
+</blockquote>
+using the clipboard as the "link", auto-generating the "name" as one
+more than the largest integer already used in the file, and putting
+the cursor between the two quotes of a blank "title". RSS generation
+will then be done on the generated HTML file, finding the
+<code>&lt!--story--></code> and <code>&lt;!--/story--></code> comments
+and pulling the link and title out of the generated anchor tag.
+<p>
+Comments?
+<p>
+<p>
+<table width="99%" cellspacing="0" border="0">
+<tr>
+<td bgcolor="black">
+<font size="+1" color="#f8f0ff">
+<b>BlogMax 1.01</b>
+</font>
+</td>
+<td bgcolor="black" align="right" valign="middle">
+<a href="021005.html" title="Permanent link to this day: 021005.html"><img src="dailyLinkIcon.png" alt="Daily" border="0" /></a>
+</td>
+</tr>
+</table>
+<b>Saturday, October 5, 2002</b><p>
+<!--BlogMax 1.01-->
+Hard to believe it's been almost a year since my last update. I use
+BlogMax almost every day for my political blog
+(<a href="http://billstclair.com/blog/">End the War on Freedom</a>). I've made some small changes to it over
+the last eleven months, but I'm just now getting around to uploading
+them.
+<p>
+I converted the three image files from GIF to PNG. Hopefully, this
+will be good news to my Linux users.
+<p>
+<a href="weblog.ini">
+weblog.ini</a> now includes some comments from
+<a href=" http://jamesthornton.com">
+James Thornton</a> on using
+<a href="http://sourceforge.net/projects/tramp/">
+Tramp</a> to do "scp" for the web site upload.
+It also includes a new "month-index" flag, which controls whether a
+monthly index page is generated and linked to the month name in the
+output of the {calendar}
+<a href="docs/macros.html">
+macro</a> (as you should see in the upper right-hand corner of this
+page). The default is to generate the monthly index file.
+<p>
+I implemented
+<a href="http://www.minority-report.co.uk/">
+Tony Sidaway</a>'s suggestions, adding "alt" attributes to "&lt;img
+...>" tags and "#" to the colors in the template files. I also removed
+the final newline in "side-links.inc". The generated html should now
+pass weblint, though it still uses tables for layout because I've been
+too lazy to learn enough CSS to switch.
+<p>
+The {calendar}
+<a href="docs/macros.html">
+macro</a> now makes the link to the previous or next month go to the
+previous or next day file even if it's further away than a month.
+<p>
+<p>
+<p>
+</td>
+<td valign="top">
+<table style="font-size: 75%; text-align: center;" border="0" cellspacing="0" cellpadding="1">
+<tr><td colspan="7" style="text-align: center; font-size: 113%;"><a href="1103.html">March</a> 2011</td></tr>
+<tr style="color: green;">
+<td>Sun</td>
+<td>Mon</td>
+<td>Tue</td>
+<td>Wed</td>
+<td>Thu</td>
+<td>Fri</td>
+<td>Sat</td>
+</tr><tr>
+<td colspan="2"></td>
+<td align="center">1</td>
+<td align="center">2</td>
+<td align="center">3</td>
+<td align="center">4</td>
+<td align="center"><span style="color: red;">5</span></td>
+</tr><tr>
+<td align="center">6</td>
+<td align="center">7</td>
+<td align="center">8</td>
+<td align="center">9</td>
+<td align="center">10</td>
+<td align="center">11</td>
+<td align="center">12</td>
+</tr><tr>
+<td align="center">13</td>
+<td align="center">14</td>
+<td align="center">15</td>
+<td align="center">16</td>
+<td align="center">17</td>
+<td align="center">18</td>
+<td align="center">19</td>
+</tr><tr>
+<td align="center">20</td>
+<td align="center">21</td>
+<td align="center">22</td>
+<td align="center">23</td>
+<td align="center">24</td>
+<td align="center">25</td>
+<td align="center">26</td>
+</tr><tr>
+<td align="center">27</td>
+<td align="center">28</td>
+<td align="center">29</td>
+<td align="center">30</td>
+<td align="center">31</td>
+</tr><tr>
+<td align="center" colspan="7"><a href="041208.html">Feb</a>&nbsp;&nbsp;Apr
+</td></tr>
+</table>
+<p>
 
-  <div id="container">
-
-    <div class="download">
-      <a href="http://github.com/billstclair/BlogMax/zipball/master">
-        <img border="0" width="90" src="http://github.com/images/modules/download/zip.png"></a>
-      <a href="http://github.com/billstclair/BlogMax/tarball/master">
-        <img border="0" width="90" src="http://github.com/images/modules/download/tar.png"></a>
-    </div>
-
-    <h1><a href="http://github.com/billstclair/BlogMax">BlogMax</a>
-      <span class="small">by <a href="http://github.com/billstclair">billstclair</a></span></h1>
-
-    <div class="description">
-      Simple template-based blogging package for Emacs
-    </div>
-
-    <h2>Authors</h2>
-<p>Bill St. Clair (billstclair@gmail.com)<br/><br/>      </p>
-<h2>Contact</h2>
-<p>Bill St. Clair (billstclair@gmail.com)<br/>      </p>
-
-
-    <h2>Download</h2>
-    <p>
-      You can download this project in either
-      <a href="http://github.com/billstclair/BlogMax/zipball/master">zip</a> or
-      <a href="http://github.com/billstclair/BlogMax/tarball/master">tar</a> formats.
-    </p>
-    <p>You can also clone the project with <a href="http://git-scm.com">Git</a>
-      by running:
-      <pre>$ git clone git://github.com/billstclair/BlogMax</pre>
-    </p>
-
-    <div class="footer">
-      get the source code on GitHub : <a href="http://github.com/billstclair/BlogMax">billstclair/BlogMax</a>
-    </div>
-
-  </div>
-
-  
+<center><a href="rss.xml" title="This is a link to this site's RSS channel: BlogMax: Blogging in Emacs">
+<img src="xml.png" alt="xml" height="14" width="36" border="0"></a></center>
+<p>
+</td></tr>
+</table>
+<hr size="1" noshade>
+<table width="99%" cellspacing="0" cellpadding="2" border="0">
+<tr><td>
+<a href="http://www.gnu.org/software/emacs/">
+<img src="emacs.png" alt="emacs" align="left"></a>
+Copyright &copy; 2011 by Bill St. Clair
+&lt;<a href="mailto:bill@billstclair.com">bill@billstclair.com</a>&gt;
+</td><td align="right">
+<a href="110305.txt">source</a>
+</td></tr>
+</table>
 </body>
 </html>

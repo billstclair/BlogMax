@@ -1,0 +1,240 @@
+<html>
+<head>
+<title>BlogMax: Blogging in Emacs - A Day in the Life of a BlogMax Web Site</title>
+</head>
+<body>
+<font size="+3"><b>
+<a href="../index.html">
+BlogMax: Blogging in Emacs</a></b></font><br>
+<i>A great way to maintain a blog</i>
+<table width="99%">
+<tr><td align="right" valign="top">
+<!--Side Links-->
+<b>
+<a href="../index.html">Home</a>
+<p>
+<a href="license.html">License</a>
+<p>
+<a href="../../blogmax.zip">Download</a>
+<p>
+<a href="index.html">Docs</a>
+<p>
+<a href="blogs.html">Blogs</a>
+</b>
+</td>
+<td width="10px">&nbsp;</td>
+<td width="1" bgcolor="gray"></td>
+<td width="10px">&nbsp;</td>
+<td valign="top" width="99%">
+<table width="99%">
+<tr>
+<td bgcolor="black">
+<font size="+1" color="#f8f0ff">
+<b>A Day in the Life of a BlogMax Web Site</b>
+</font>
+</td>
+</tr>
+</table>
+<!--A Day in the Life of a BlogMax Web Site-->
+<font size="-1">
+<a href="definemacros.html">Defining New Macros</a> |
+<a href="index.html">Contents</a> |
+<a href="blogmax-code.html">BlogMax Code</a>
+</font>
+<p>
+This page describes how I use BlogMax to maintain my weblog,
+<a href="http://billstclair.com/blog/index.html">
+End the War on Freedom</a>. I spend an hour or two most days reading
+news and inserting links and commentary into the day's weblog page.
+<p>
+My typing is indented and in:
+<blockquote>
+<code><b>
+bold code font
+</b></code>.
+</blockquote>
+Text in the blog is indented and in:
+<blockquote>
+<code>
+code font
+</code>
+</blockquote>
+<p>
+To begin, look at the calendar. Today is 9 June, 2001. In yymmdd
+language, that's 010609. So I open that text file in my weblog
+directory:
+<blockquote>
+<code><b>
+C-x C-f e:/editthispage/010609.txt
+</b></code>
+</blockquote>
+Next I traverse my daily links. Let's suppose I find a story at
+LewRockwell.com, say a new Patricia Neill article. I copy the article
+link from my web browser's address line, go back to Emacs, and paste
+it in:
+<blockquote>
+<code><b>
+C-M-a
+</b></code>
+</blockquote>
+At this point, my Emacs buffer looks something like:
+<blockquote>
+<code>
+&lt;a href="http://www.lewrockwell.com/neill/neill23.html"><br>
+&lt;/a>
+</code>
+</blockquote>
+Copy the story title form the web browser, and paste it into the
+weblog:
+<blockquote>
+<code><b>
+C-y
+</b></code>
+</blockquote>
+yielding:
+<blockquote>
+<code>
+&lt;a href="http://www.lewrockwell.com/neill/neill-010607.html"><br>
+If I have to Pay Reparations for Slavery . . .&lt;/a>
+</code>
+</blockquote>
+Then copy Patti's name from the browser and enter it and the story
+location:
+<blockquote>
+<code><b>
+C-p C-a C-o C-y at LewRockwell.com -
+</b></code>
+</blockquote>
+yielding:
+<blockquote>
+<code>
+Patricia Neill at LewRockwell.com -<br>
+&lt;a href="http://www.lewrockwell.com/neill/neill23.html"><br>
+If I have to Pay Reparations for Slavery . . .&lt;/a>
+</code>
+</blockquote>
+Enter a few comments on the article yielding:
+<blockquote>
+<code>
+Patricia Neill at LewRockwell.com -<br>
+&lt;a href="http://www.lewrockwell.com/neill/neill-010607.html"><br>
+If I have to Pay Reparations for Slavery...&lt;/a> - If Patti is going<br>
+to be taxed to pay for slavery, she is damn well gonna get some<br>
+slaves. The black market will take care of it. Only, what will she do<br>
+with slaves?
+</code>
+</blockquote>
+Copy a quote from the article, and paste it in with a surrounding
+blockquote:
+<blockquote>
+<code><b>
+C-M-u
+</b></code>
+</blockquote>
+yielding:
+<blockquote>
+<code>
+Patricia Neill at LewRockwell.com -<br>
+&lt;a href="http://www.lewrockwell.com/neill/neill23.html"><br>
+If I Have to Pay Reparations for Slavery . . .&lt;/a> - If Patti is going<br>
+to be taxed to pay for slavery, she is damn well gonna get some<br>
+slaves. The black market will take care of it. Only, what will she do<br>
+with slaves?<br>
+&lt;blockquote><br>
+It makes no logical sense to ask me to pay reparations for slavery<br>
+unless I have personally indulged in slavery and caused some actual<br>
+harm thereby. So if "free money" is to be made from my alleged<br>
+"white guilt," I think it only fair that I have something to be<br>
+guilty of. And I plan to be plenty guilty before I'd be willing to<br>
+allow any government silly enough to call me its "subject" to take<br>
+my money for reparations for slavery.<br>
+&lt;/blockquote>
+</code>
+</blockquote>
+Finally, remember to give Lew credit by pasting in a source link (I
+put square brackets around source links):
+<blockquote>
+<code><b>
+C-p C-p C-p C-p C-p C-p C-p C-p C-p  M-] lew
+</b></code>
+</blockquote>
+yielding:
+<blockquote>
+<code>
+Patricia Neill at LewRockwell.com -<br>
+&lt;a href="http://www.lewrockwell.com/neill/neill23.html"><br>
+If I Have to Pay Reparations for Slavery . . .&lt;/a> - If Patti is going<br>
+to be taxed to pay for slavery, she is damn well gonna get some<br>
+slaves. The black market will take care of it. Only, what will she do<br>
+with slaves? [{@lew}]<br>
+&lt;blockquote><br>
+It makes no logical sense to ask me to pay reparations for slavery<br>
+unless I have personally indulged in slavery and caused some actual<br>
+harm thereby. So if "free money" is to be made from my alleged<br>
+"white guilt," I think it only fair that I have something to be<br>
+guilty of. And I plan to be plenty guilty before I'd be willing to<br>
+allow any government silly enough to call me its "subject" to take<br>
+my money for reparations for slavery.<br>
+&lt;/blockquote>
+</code>
+</blockquote>
+And one entry is done. It looks like this in the browser:
+<blockquote>
+Patricia Neill at LewRockwell.com -
+<a href="http://www.lewrockwell.com/neill/neill23.html">
+If I Have to Pay Reparations for Slavery . . .</a> - If Patti is going
+to be taxed to pay for slavery, she is damn well gonna get some
+slaves. The black market will take care of it. Only, what will she do
+with slaves? [<a href="http://www.lewrockwell.com/">lew</a>]
+<blockquote>
+It makes no logical sense to ask me to pay reparations for slavery
+unless I have personally indulged in slavery and caused some actual
+harm thereby. So if "free money" is to be made from my alleged
+"white guilt," I think it only fair that I have something to be
+guilty of. And I plan to be plenty guilty before I'd be willing to
+allow any government silly enough to call me its "subject" to take
+my money for reparations for slavery.
+</blockquote>
+</blockquote>
+Make a few more entries, and it's time to publish. Every time I
+save with C-x C-s, BlogMax generates HTML and I check it out in the
+web browser. Now I type C-x C-i to generate the index, check that out
+in the web browser, and type C-0 C-x C-i to regenerate this month's
+pages, the RSS channel, and upload everything via FTP.
+<p>
+Oops, I forgot to add a title. Do that, publish the page again, create
+the index and upload it:
+<blockquote>
+<code><b>
+M-< M-! Patti, Frog Farm Mirror, Radio Userland C-x M-s C-- C-1 C-x C-i
+</b></code>
+</blockquote>
+The top of the page now looks like:
+<blockquote>
+<code>
+&lt;!--Patti, Frog Farm Mirror, Radio Userland-->
+</code>
+</blockquote>
+<p>
+<font size="-1">
+<a href="definemacros.html">Defining New Macros</a> |
+<a href="index.html">Contents</a> |
+<a href="blogmax-code.html">BlogMax Code</a>
+</font>
+<p>
+
+</td></tr>
+</table>
+<hr size="1" noshade>
+<table width="99%" cellspacing="0" cellpadding="2" border="0">
+<tr><td>
+<a href="http://www.gnu.org/software/emacs/">
+<img src="../emacs.png" alt="emacs" align="left"></a>
+Copyright &copy; 2001 by Bill St. Clair
+&lt;<a href="mailto:bill@billstclair.com">bill@billstclair.com</a>&gt;
+</td><td align="right">
+<a href="dayinthelife.txt">source</a>
+</td></tr>
+</table>
+</body>
+</html>

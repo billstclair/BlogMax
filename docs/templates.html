@@ -1,0 +1,235 @@
+<html>
+<head>
+<title>BlogMax: Blogging in Emacs - Templates</title>
+</head>
+<body>
+<font size="+3"><b>
+<a href="../index.html">
+BlogMax: Blogging in Emacs</a></b></font><br>
+<i>A great way to maintain a blog</i>
+<table width="99%">
+<tr><td align="right" valign="top">
+<!--Side Links-->
+<b>
+<a href="../index.html">Home</a>
+<p>
+<a href="license.html">License</a>
+<p>
+<a href="../../blogmax.zip">Download</a>
+<p>
+<a href="index.html">Docs</a>
+<p>
+<a href="blogs.html">Blogs</a>
+</b>
+</td>
+<td width="10px">&nbsp;</td>
+<td width="1" bgcolor="gray"></td>
+<td width="10px">&nbsp;</td>
+<td valign="top" width="99%">
+<table width="99%">
+<tr>
+<td bgcolor="black">
+<font size="+1" color="#f8f0ff">
+<b>Templates</b>
+</font>
+</td>
+</tr>
+</table>
+<!--Templates-->
+<font size="-1">
+<a href="mode.html">Weblog Mode</a> |
+<a href="index.html">Contents</a> |
+<a href="macros.html">Macros</a>
+</font>
+<p>
+<a href="../blogmax.el">blogmax.el</a> works by substituting your text files into
+templates that you define. It looks in the directory
+containing the text file for the template and then in each
+parent directory until it finds it. Most sites will just
+have one template in the main directory, but you don't have
+to do it that way. And you can also have two different sites
+that share some templates by making their root directories
+both children of a directory containing the templates.
+<p>
+You control the substitution with
+<a href="macros.html">
+macros</a>, some of which look up shortcuts, some of which
+pull in file content, and some of which report certain
+information about the current file or your blog as a
+whole. You can also use the full power of Emacs Lisp in a
+macro.
+<p>
+There are four templates:
+<ul>
+<li>The page template: <code>page-template.tmpl</code><br>
+This is the top-level template. Rendering of every page
+starts with the contents of this template.
+<li>The content template:
+<code>content-template.tmpl</code><br> This template is
+substituted for the {contentTemplate} macro on daily blog
+pages, pages that are in your site's root directory.
+<li>The story template: <code>story-template.tmpl</code><br>
+This template is substituted for the {contentTemplate}
+macro on story pages, pages that are in a sub-directory of
+your site's root direectory.
+<li>The day template: <code>day-template.tmpl</code><br>
+This template is substituted for the {dayTemplate} macro.
+</ul>
+<hr>
+Here's the page-template.tmpl file for this site. Note the {txtLink}
+macro near the end of the file. That generates a link to the text file
+containing the page's contents. This allows you to easily get to the
+contents of each page in this site.
+<blockquote>
+<pre>&lt;html&gt;
+&lt;head&gt;
+&lt;title&gt;{siteName} - {title}&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;font size="+3"&gt;&lt;b&gt;
+&lt;a href="{blogToplevel}index.html"&gt;
+{siteName}&lt;/a&gt;&lt;/b&gt;&lt;/font&gt;&lt;br&gt;
+&lt;i&gt;{byline}&lt;/i&gt;
+&lt;table width="99%"&gt;
+&lt;tr&gt;&lt;td align="right" valign="top"&gt;
+{include (concat (weblog-macro-blogToplevel) "side-links.inc")}
+&lt;/td&gt;
+&lt;td width="10px"&gt;&amp;nbsp;&lt;/td&gt;
+&lt;td width="1" bgcolor="gray"&gt;&lt;/td&gt;
+&lt;td width="10px"&gt;&amp;nbsp;&lt;/td&gt;
+&lt;td valign="top" width="99%"&gt;
+{contentTemplate}
+&lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;
+&lt;hr size="1" noshade&gt;
+&lt;table width="99%" cellspacing="0" cellpadding="2" border="0"&gt;
+&lt;tr&gt;&lt;td&gt;
+&lt;a href="http://www.gnu.org/software/emacs/"&gt;
+&lt;img src="{blogToplevel}emacs.png" alt="emacs" align="left"&gt;&lt;/a&gt;
+Copyright &amp;copy; {year} by {author}
+&amp;lt;&lt;a href="mailto:{email}"&gt;{email}&lt;/a&gt;&amp;gt;
+&lt;/td&gt;&lt;td align="right"&gt;
+{txtLink "source"}
+&lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</pre>
+</blockquote>
+<hr>
+Here's the story-template.tmpl file for this site. This
+replaces {contentTemplate} in the text above.
+<blockquote>
+<pre>&lt;table width="99%"&gt;
+&lt;tr&gt;
+&lt;td bgcolor="black"&gt;
+&lt;font size="+1" color="#f8f0ff"&gt;
+&lt;b&gt;{title}&lt;/b&gt;
+&lt;/font&gt;
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/table&gt;
+{storyContent}
+</pre>
+</blockquote>
+<hr>
+<a name="text">
+Here's the file
+<a href="templates.txt">
+templates.txt</a> that provides the content for this
+page. This replaces {storyContent} in the text above.
+<blockquote>
+<pre>&lt;!--Templates--&gt;
+&lt;font size="-1"&gt;
+&lt;a href="mode.html"&gt;Weblog Mode&lt;/a&gt; |
+&lt;a href="index.html"&gt;Contents&lt;/a&gt; |
+&lt;a href="macros.html"&gt;Macros&lt;/a&gt;
+&lt;/font&gt;
+ 
+{@blogmax.el} works by substituting your text files into
+templates that you define. It looks in the directory
+containing the text file for the template and then in each
+parent directory until it finds it. Most sites will just
+have one template in the main directory, but you don't have
+to do it that way. And you can also have two different sites
+that share some templates by making their root directories
+both children of a directory containing the templates.
+ 
+You control the substitution with
+&lt;a href="macros.html"&gt;
+macros&lt;/a&gt;, some of which look up shortcuts, some of which
+pull in file content, and some of which report certain
+information about the current file or your blog as a
+whole. You can also use the full power of Emacs Lisp in a
+macro.
+ 
+There are four templates:
+&lt;ul&gt;
+&lt;li&gt;The page template: &lt;code&gt;page-template.tmpl&lt;/code&gt;&lt;br&gt;
+This is the top-level template. Rendering of every page
+starts with the contents of this template.
+&lt;li&gt;The content template:
+&lt;code&gt;content-template.tmpl&lt;/code&gt;&lt;br&gt; This template is
+substituted for the \{contentTemplate} macro on daily blog
+pages, pages that are in your site's root directory.
+&lt;li&gt;The story template: &lt;code&gt;story-template.tmpl&lt;/code&gt;&lt;br&gt;
+This template is substituted for the \{contentTemplate}
+macro on story pages, pages that are in a sub-directory of
+your site's root direectory.
+&lt;li&gt;The day template: &lt;code&gt;day-template.tmpl&lt;/code&gt;&lt;br&gt;
+This template is substituted for the \{dayTemplate} macro.
+&lt;/ul&gt;
+&lt;hr&gt;
+Here's the page-template.tmpl file for this site. Note the \{txtLink}
+macro near the end of the file. That generates a link to the text file
+containing the page's contents. This allows you to easily get to the
+contents of each page in this site.
+&lt;blockquote&gt;
+{include "../page-template.tmpl" t t}
+&lt;/blockquote&gt;
+&lt;hr&gt;
+Here's the story-template.tmpl file for this site. This
+replaces \{contentTemplate} in the text above.
+&lt;blockquote&gt;
+{include "../story-template.tmpl" t t}
+&lt;/blockquote&gt;
+&lt;hr&gt;
+&lt;a name="text"&gt;
+Here's the file
+&lt;a href="templates.txt"&gt;
+templates.txt&lt;/a&gt; that provides the content for this
+page. This replaces \{storyContent} in the text above.
+&lt;blockquote&gt;
+{include "templates.txt" t t}
+&lt;/blockquote&gt;
+ 
+&lt;font size="-1"&gt;
+&lt;a href="mode.html"&gt;Weblog Mode&lt;/a&gt; |
+&lt;a href="index.html"&gt;Contents&lt;/a&gt; |
+&lt;a href="macros.html"&gt;Macros&lt;/a&gt;
+&lt;/font&gt;
+</pre>
+</blockquote>
+<p>
+<font size="-1">
+<a href="mode.html">Weblog Mode</a> |
+<a href="index.html">Contents</a> |
+<a href="macros.html">Macros</a>
+</font>
+<p>
+
+</td></tr>
+</table>
+<hr size="1" noshade>
+<table width="99%" cellspacing="0" cellpadding="2" border="0">
+<tr><td>
+<a href="http://www.gnu.org/software/emacs/">
+<img src="../emacs.png" alt="emacs" align="left"></a>
+Copyright &copy; 2002 by Bill St. Clair
+&lt;<a href="mailto:bill@billstclair.com">bill@billstclair.com</a>&gt;
+</td><td align="right">
+<a href="templates.txt">source</a>
+</td></tr>
+</table>
+</body>
+</html>

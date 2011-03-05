@@ -1,0 +1,33 @@
+<html>
+<head>
+<title>{siteName} - {title}</title>
+</head>
+<body>
+<font size="+3"><b>
+<a href="{blogToplevel}index.html">
+{siteName}</a></b></font><br>
+<i>{byline}</i>
+<table width="99%">
+<tr><td align="right" valign="top">
+{include (concat (weblog-macro-blogToplevel) "side-links.inc")}
+</td>
+<td width="10px">&nbsp;</td>
+<td width="1" bgcolor="gray"></td>
+<td width="10px">&nbsp;</td>
+<td valign="top" width="99%">
+{contentTemplate}
+</td></tr>
+</table>
+<hr size="1" noshade>
+<table width="99%" cellspacing="0" cellpadding="2" border="0">
+<tr><td>
+<a href="http://www.gnu.org/software/emacs/">
+<img src="{blogToplevel}emacs.png" alt="emacs" align="left"></a>
+Copyright &copy; {year} by {author}
+&lt;<a href="mailto:{email}">{email}</a>&gt;
+</td><td align="right">
+{txtLink "source"}
+</td></tr>
+</table>
+</body>
+</html>

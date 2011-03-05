@@ -1,0 +1,6 @@
+<!--Testing in Linux-->
+I renamed the "Stories" directory to "Docs" and added a "Home" link to
+the left column. I also added the {@rsslink} rss link to the content
+template. I'm downloading Caldera Linux (all 641.8 megs) from my hotel
+room. I want to try BlogMax in Linux Emacs before calling it version
+0.9 and submitting to {@freshmeat}.

@@ -1,0 +1,19 @@
+<!--Defining New Macros-->
+<font size="-1">
+<a href="rss.html">RSS</a> |
+<a href="index.html">Contents</a> |
+<a href="dayinthelife.html">A Day in the Life of a BlogMax Web Site</a>
+</font>
+
+This page tells you how to define new BlogMax macros.
+
+Basically, to define the \{foo} macro, create a lisp function named
+<code>weblog-macro-foo</code>. Its argument list will be the same
+arguments required by the macro on your pages. Look at {@blogmax.el}
+for some examples.
+
+<font size="-1">
+<a href="rss.html">RSS</a> |
+<a href="index.html">Contents</a> |
+<a href="dayinthelife.html">A Day in the Life of a BlogMax Web Site</a>
+</font>

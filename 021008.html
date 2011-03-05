@@ -1,0 +1,158 @@
+<html>
+<head>
+<title>BlogMax: Blogging in Emacs - Improving RSS</title>
+</head>
+<body>
+<font size="+3"><b>
+<a href="index.html">
+BlogMax: Blogging in Emacs</a></b></font><br>
+<i>A great way to maintain a blog</i>
+<table width="99%">
+<tr><td align="right" valign="top">
+<!--Side Links-->
+<b>
+<a href="index.html">Home</a>
+<p>
+<a href="docs/license.html">License</a>
+<p>
+<a href="../blogmax.zip">Download</a>
+<p>
+<a href="docs/index.html">Docs</a>
+<p>
+<a href="docs/blogs.html">Blogs</a>
+</b>
+</td>
+<td width="10px">&nbsp;</td>
+<td width="1" bgcolor="gray"></td>
+<td width="10px">&nbsp;</td>
+<td valign="top" width="99%">
+BlogMax is an Emacs package that aids in the creation of a
+weblog. News below. See the
+<a href="docs/index.html">Docs</a> page
+for details.
+<p>
+<table width="99%" cellspacing="0" border="0">
+<tr>
+<td bgcolor="black">
+<font size="+1" color="#f8f0ff">
+<b>Improving RSS</b>
+</font>
+</td>
+<td bgcolor="black" align="right" valign="middle">
+<p>
+</td>
+</tr>
+</table>
+<b>Tuesday, October 8, 2002</b><p>
+<!--Improving RSS-->
+I've been using
+<a href="http://www.disobey.com/amphetadesk/">
+amphetaDesk</a> to scan RSS channels. The RSS that BlogMax generates
+looks funny there. The main link appears twice. I've been thinking
+about some ideas to improve the RSS and get rid of the need to use
+&lt;br> tags for paragraph breaks within an entry. I think I know what
+to do now.
+<p>
+I'll add two new macros, <code>{story link title name}</code> and
+<code>{/story}</code>. The RSS generation will include only the text
+between the two new macros (using the old algorithm for backward
+compatibility on pages that contain no instance of the
+<code>{story}</code> macro).
+<p>
+<code>{story link title name}</code> will expand into:
+<blockquote>
+<code>&lt;!--story-->&lt;a href=link name=name>title&lt;/a></code>
+</blockquote>
+<code>{/story}</code> will expand into:
+<blockquote>
+<code>&lt;!--/story--></code>
+</blockquote>
+The weblog-insert-story-tags command, likely bound to
+&lt;Ctrl>&lt;Shift>-S, will insert:
+<blockquote>
+<code>{story ...}{/story}</code>
+</blockquote>
+using the clipboard as the "link", auto-generating the "name" as one
+more than the largest integer already used in the file, and putting
+the cursor between the two quotes of a blank "title". RSS generation
+will then be done on the generated HTML file, finding the
+<code>&lt!--story--></code> and <code>&lt;!--/story--></code> comments
+and pulling the link and title out of the generated anchor tag.
+<p>
+Comments?
+<p>
+<p>
+<p>
+</td>
+<td valign="top">
+<table border="0" cellspacing="0" cellpadding="1">
+<tr><td colspan="7"><center><a href="0210.html">October</a> 2002</center></td></tr>
+<tr>
+<td><font size="-2" color="green">Sun</font></td>
+<td><font size="-2" color="green">Mon</font></td>
+<td><font size="-2" color="green">Tue</font></td>
+<td><font size="-2" color="green">Wed</font></td>
+<td><font size="-2" color="green">Thu</font></td>
+<td><font size="-2" color="green">Fri</font></td>
+<td><font size="-2" color="green">Sat</font></td>
+</tr><tr>
+<td colspan="2"></td>
+<td align="center"><font size="-2">1</font></td>
+<td align="center"><font size="-2">2</font></td>
+<td align="center"><font size="-2">3</font></td>
+<td align="center"><font size="-2">4</font></td>
+<td align="center"><a href="021005.html"><font size="-2">5</font></a></td>
+</tr><tr>
+<td align="center"><font size="-2">6</font></td>
+<td align="center"><font size="-2">7</font></td>
+<td align="center"><font size="-2" color="red">8</font></td>
+<td align="center"><font size="-2">9</font></td>
+<td align="center"><font size="-2">10</font></td>
+<td align="center"><font size="-2">11</font></td>
+<td align="center"><font size="-2">12</font></td>
+</tr><tr>
+<td align="center"><font size="-2">13</font></td>
+<td align="center"><font size="-2">14</font></td>
+<td align="center"><font size="-2">15</font></td>
+<td align="center"><font size="-2">16</font></td>
+<td align="center"><font size="-2">17</font></td>
+<td align="center"><font size="-2">18</font></td>
+<td align="center"><font size="-2">19</font></td>
+</tr><tr>
+<td align="center"><font size="-2">20</font></td>
+<td align="center"><font size="-2">21</font></td>
+<td align="center"><font size="-2">22</font></td>
+<td align="center"><font size="-2">23</font></td>
+<td align="center"><font size="-2">24</font></td>
+<td align="center"><font size="-2">25</font></td>
+<td align="center"><font size="-2">26</font></td>
+</tr><tr>
+<td align="center"><font size="-2">27</font></td>
+<td align="center"><font size="-2">28</font></td>
+<td align="center"><font size="-2">29</font></td>
+<td align="center"><font size="-2">30</font></td>
+<td align="center"><font size="-2">31</font></td>
+</tr><tr>
+<td align="center" colspan="7"><font size="-2"><a href="011120.html">Sep</a>&nbsp;&nbsp;Nov</font>
+</td></tr>
+</table>
+<p>
+
+<center><a href="rss.xml" title="This is a link to this site's RSS channel: BlogMax: Blogging in Emacs">
+<img src="xml.png" alt="xml" height="14" width="36" border="0"></a></center>
+<p>
+</td></tr>
+</table>
+<hr size="1" noshade>
+<table width="99%" cellspacing="0" cellpadding="2" border="0">
+<tr><td>
+<a href="http://www.gnu.org/software/emacs/">
+<img src="emacs.png" alt="emacs" align="left"></a>
+Copyright &copy; 2002 by Bill St. Clair
+&lt;<a href="mailto:bill@billstclair.com">bill@billstclair.com</a>&gt;
+</td><td align="right">
+<a href="021008.txt">source</a>
+</td></tr>
+</table>
+</body>
+</html>

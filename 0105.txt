@@ -1,0 +1,12 @@
+<!--May 2001-->
+April | <b>May 2001</b> | <a href="0106.html">June</a>
+<p>
+<a href="010530.html">Wednesday, 30 May</a>: A Tiny Page
+<ul>
+</ul>
+<a href="010531.html">Thursday, 31 May</a>: A Bogus Day
+<ul>
+</ul>
+
+<p>
+April | <b>May 2001</b> | <a href="0106.html">June</a>

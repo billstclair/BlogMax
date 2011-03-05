@@ -1,0 +1,14 @@
+<!--Calendar Macro Extended-->
+In response to a user request, I have added a second optional
+parameter to the <code>calendar</code> macro. It now takes two
+optional arguments, <code>file</code> and
+<code>start-day</code>. <code>file</code> defaults to the current
+weblog story file. You will rarely if ever need to specify it. Use
+<code>nil</code> to get the default. <code>start-day</code> is the day
+of the week for the first column of the calendar. 0 is Sunday, 1 is
+Monday, ..., 6 is Saturday. The default is 0, Sunday. Hence to put in
+a calendar starting on Monday, you would place the following in one of
+your template files:
+<blockquote>
+<code>\{calendar nil 1}</code>
+</blockquote>

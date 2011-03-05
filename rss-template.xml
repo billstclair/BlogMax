@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<rss version="0.91">
+  <channel>
+    <!-- You need to customize this information -->
+    <title>weblog.el: Blogging in Emacs</title>
+    <link>http://billstclair.com/weblog.el/</link>
+    <description>A wonderful tool for maintaining a weblog</description>
+    <language>en-us</language>
+    <docs>http://billstclair.com/weblog.el/</docs>
+    <managingEditor>bill@billstclair.com</managingEditor>
+    <webMaster>bill@billstclair.com</webMaster>
+    <!-- These are just examples. They will be filled in on generation -->
+    <pubDate>Thu, 31 May 2001 04:00:00 GMT</pubDate>
+    <lastBuildDate>Thu, 31 May 2001 17:18:53 GMT</lastBuildDate>
+    <item>
+      <!-- The items are all automatically generated. Don't change this -->
+      <title>blogmax.el</title>
+      <link>http://billstclair.com/blogmax/blogmax.el</link>
+      <description>I maintain my weblogs with blogmax.el</description>
+    </item>
+  </channel>
+</rss>

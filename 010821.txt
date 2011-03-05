@@ -1,0 +1,5 @@
+<!--XEmacs Bug Fix-->
+I fixed some bugs that made BlogMax fail to work in XEmacs 21.4 on Windoze
+(and maybe elsewhere). line-end-position wasn't defined there and
+file-relative-name had a bad habit of returning backslash characters
+instead of forward slash. I curse Bill Gates regularly about that.

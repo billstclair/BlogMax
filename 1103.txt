@@ -1,0 +1,13 @@
+<!--March 2011-->
+February | <b>March 2011</b> | April
+<p>
+<a href="110305.html">Saturday, 5 March</a>: BlogMax is on GitHub
+<ul>
+<li>source, and I pushed the whole thing to<a href="https://github.com/billstclair/BlogMax">
+github.com/BlogMax</a>
+<a href="docs/license.html">
+GPL licensed</a>
+</ul>
+
+<p>
+February | <b>March 2011</b> | April

@@ -1,0 +1,137 @@
+<html>
+<head>
+<title>BlogMax: Blogging in Emacs - Installation</title>
+</head>
+<body>
+<font size="+3"><b>
+<a href="../index.html">
+BlogMax: Blogging in Emacs</a></b></font><br>
+<i>A great way to maintain a blog</i>
+<table width="99%">
+<tr><td align="right" valign="top">
+<!--Side Links-->
+<b>
+<a href="../index.html">Home</a>
+<p>
+<a href="license.html">License</a>
+<p>
+<a href="../../blogmax.zip">Download</a>
+<p>
+<a href="index.html">Docs</a>
+<p>
+<a href="blogs.html">Blogs</a>
+</b>
+</td>
+<td width="10px">&nbsp;</td>
+<td width="1" bgcolor="gray"></td>
+<td width="10px">&nbsp;</td>
+<td valign="top" width="99%">
+<table width="99%">
+<tr>
+<td bgcolor="black">
+<font size="+1" color="#f8f0ff">
+<b>Installation</b>
+</font>
+</td>
+</tr>
+</table>
+<!--Installation-->
+<font size="-1">
+<a href="overview.html">Overview</a> |
+<a href="index.html">Contents</a> |
+<a href="weblogini.html">weblog.ini</a>
+</font>
+<p>
+This page tells you how to install BlogMax in your Emacs and how to
+set up your first web site.
+<p>
+The file <a href="../blogmax.el">blogmax.el</a> is all the code you need, in addition to Emacs
+itself. If you byte compile it with byte-compile-file, or use the
+distributed <a href="../blogmax.elc">blogmax.elc</a>, it will load and run faster. Put both of
+these files in the "lisp" sub-directory of your Emacs directory (or
+anywhere else that you please). Now, add the following line to your
+".emacs" file:
+<blockquote>
+<code>(require 'blogmax)</code>
+</blockquote>
+If you put <a href="../blogmax.el">blogmax.el</a> and <a href="../blogmax.elc">blogmax.elc</a> in some directory other
+than the Emacs "lisp" directory, e.g. "~/emacs-extensions/", then use
+the following instead in your .emacs file:
+<blockquote>
+<code>(require 'blogmax "~/emacs-extensions/blogmax.el")</code>
+</blockquote>
+You can also load it explicitly with "M-x load-file" or by opening the
+file in a buffer and doing "M-x eval-buffer". Usually, however, you'll
+want to load it with <code>require</code> in your .emacs file.
+<p>
+To set up your first web site, pick or create a directory, and create
+a
+<a href="weblogini.html">
+weblog.ini</a> file in that directory. The easiest way to do this is to
+copy the
+<a href="../weblog.ini">
+weblog.ini file</a> from this web site into your directory, and then
+edit it to describe your site.
+<p>
+Copy the
+<a href="templates.html">
+templates</a> files,
+<a href="../page-template.tmpl">
+page-template.tmpl</a>,
+<a href="../content-template.tmpl">
+content-template.tmpl</a>,
+<a href="../day-template.tmpl">
+day-template.tmpl</a>, and
+<a href="../story-template.tmpl">
+story-template.tmpl</a> to your site's root directory. Customize
+them as you desire. The template files contain nothing specific to
+this site, so you can use them as they are if you want your site to be
+similar to this one. Well, almost nothing. The links in the left-hand
+column are defined by
+<a href="../side-links.inc">
+side-links.inc</a>, which is included by
+<a href="../page-template.tmpl">
+page-template.tmpl</a>.
+<p>
+Then copy this site's
+<a href="../rss-template.xml">
+rss-template.xml</a> file to your site's root directory, and edit it
+to describe your site, as documented on the
+<a href="rss.html">
+RSS</a> page.
+<p>
+Finally, copy this site's
+<a href="../shortcuts.el">
+shortcuts.el</a> file to your site's root directory. This file is
+where the weblog-add-shortcut command (C-x C-a) stores new
+shortcuts. It is an Emacs lisp file, so be careful when editing it by
+hand.
+<p>
+You're ready to start blogging. The
+<a href="dayinthelife.html">
+Day in the Life</a> page will help you get started creating
+content, but you'll probably want to read the rest of the
+<a href="index.html">docs</a> as well.
+<p>
+<font size="-1">
+<a href="overview.html">Overview</a> |
+<a href="index.html">Contents</a> |
+<a href="weblogini.html">weblog.ini</a>
+</font>
+<p>
+
+</td></tr>
+</table>
+<hr size="1" noshade>
+<table width="99%" cellspacing="0" cellpadding="2" border="0">
+<tr><td>
+<a href="http://www.gnu.org/software/emacs/">
+<img src="../emacs.png" alt="emacs" align="left"></a>
+Copyright &copy; 2002 by Bill St. Clair
+&lt;<a href="mailto:bill@billstclair.com">bill@billstclair.com</a>&gt;
+</td><td align="right">
+<a href="install.txt">source</a>
+</td></tr>
+</table>
+</body>
+</html>

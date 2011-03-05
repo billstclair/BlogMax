@@ -1,0 +1,8 @@
+<!--Bug Fix-->
+The RSS file will only be uploaded when you upload a file in the
+weblog base directory with today's date. The check for weblog base
+directory is new.
+
+There's a language tag in
+<a href="rss-template.xml">
+rss-template.xml</a>.
