@@ -302,6 +302,9 @@
 ;; The {dayTemplate} macro expands into the contents of this file.
 (defconst *weblog-day-template-file* "day-template.tmpl")
 
+;; The directory for pictures
+(defconst *weblog-picdir* "")
+
 (defconst *weblog-escape-string* "\\")
 (defconst *weblog-escape-char* (string-to-char *weblog-escape-string*))
 (defconst *weblog-equal-sign-char* (string-to-char "="))
@@ -319,6 +322,22 @@
     ("\205" "...")
     ("\240" "")
     ))
+(defconst *weblog-repl-map*
+  '(
+    (";-)" "<img class=\"smiley\" src=\"wink-smiley.png\"/>")
+    (":-)" "<img class=\"smiley\" src=\"smiley.png\"/>")
+    ("" "{tt \"")
+    ("" "\"}")
+    ("#\\([0-9]+\\)" "<a href=\"https://nano.taodyne.com/redmine/issues/\\1\">#\\1</a>")
+    ))
+
+(defconst *weblog-code-map*
+  '(
+    ("<" "&lt;")
+    (">" "&gt;")
+    ))
+
+(defvar *weblog-section* 0)
 
 ;; Append the *weblog-directory* to the given filename
 (defun weblog-file (file)
@@ -710,7 +729,7 @@ using the *weblog-page-template-file*."
         (when (weblog-story-file-p file-name)
           (setq *weblog-content-template-file* *weblog-story-template-file*
                 *weblog-saving-story* t))
-        (let* ((content (weblog-buffer-contents))
+        (let* ((content (weblog-process-replmap (weblog-buffer-contents)))
                (ext (file-name-extension file-name))
                (ext-len (if (null ext) 
                             (progn (setq file-name (concat file-name ".")) 0)
@@ -855,7 +874,8 @@ If prefix arg is 2, upload all text files in the current directory and its sub-d
             (weblog-upload))
           (weblog-maybe-upload-previous-month-file))))
     (cond ((eql 0 index-only) (weblog-upload-month))
-          ((eql 2 index-only) (weblog-upload-directory-text)))))
+          ((eql 2 index-only) (weblog-upload-directory-text))))
+  (shell-command "./rsync-blog"))
 
 (defun weblog-upload-directory-text (&optional file)
   "Regenerate html for and upload every \".txt\" file
@@ -1350,8 +1370,8 @@ Upload it to the FTP server."
                (month-file (weblog-month-file-name month year ".html"))
                (month-name (calendar-month-name month)))
 	  (with-output-to-string
-	    (princ "<table style=\"font-size: 75%; text-align: center;\" border=\"0\" cellspacing=\"0\" cellpadding=\"1\">\n")
-	    (princ "<tr><td colspan=\"7\" style=\"text-align: center; font-size: 113%;\">")
+	    (princ "<table border=\"0\" cellspacing=\"0\" cellpadding=\"1\">\n")
+	    (princ "<tr><td colspan=\"7\"><center>")
             (if *weblog-generate-month-index-p*
                 (princ (concat
                         "<a href=\""
@@ -1362,7 +1382,7 @@ Upload it to the FTP server."
               (princ month-name))
 	    (princ " ")
             (princ year)
-            (princ "</td></tr>\n<tr style=\"color: green;\">\n")
+            (princ "</center></td></tr>\n<tr>\n")
             (dotimes (i 7)
               (princ "<td>")
               (let ((column-day (mod (+ i start-day) 7)))
@@ -1577,7 +1597,7 @@ Upload it to the FTP server."
                   ".html")))
       (when (null link-text)
         (setq link-text
-              "<img src=\"{blogToplevel}dailyLinkIcon.png\" alt=\"Daily\" border=\"0\" />"))
+              "<img class=\"daily\" src=\"{blogToplevel}dailyLinkIcon.png\" alt=\"Daily\" border=\"0\" />"))
       (concat "<a href=\"{blogToplevel}" file
               "\" title=\"Permanent link to this day: "
               file "\">"
@@ -2015,7 +2035,7 @@ Just insert 'text' if the 'file' does not exist in directory 'dir'"
 ;;; Any text file in the *weblog-directory* is opened in weblog-mode
 ;;;
 
-(define-derived-mode weblog-mode html-mode "Weblog"
+(define-derived-mode weblog-mode text-mode "Weblog"
   nil
   (auto-fill-mode)
   (make-local-variable 'sgml-indent-step)
@@ -2058,6 +2078,20 @@ Just insert 'text' if the 'file' does not exist in directory 'dir'"
          (unless (search-forward from nil t) (return))
          (replace-match to t t))))))
 
+(defun weblog-process-replmap (text)
+  (dolist (pair *weblog-repl-map*)
+    (let ((from (car pair))
+          (to (cadr pair)))
+      (setq text (replace-regexp-in-string from to text))))
+  text)
+
+(defun weblog-process-codemap (text)
+  (dolist (pair *weblog-code-map*)
+    (let ((from (car pair))
+          (to (cadr pair)))
+      (setq text (replace-regexp-in-string from to text))))
+  text)
+
 (defun weblog-set-buffer-mode ()
   "Set the mode to weblog-mode for text files in the *weblog-directory*"
   (interactive)
@@ -2087,11 +2121,11 @@ Just insert 'text' if the 'file' does not exist in directory 'dir'"
 (defun weblog-yank-blockquote ()
   "Yank a blockquote section"
   (interactive)
-  (insert "<blockquote><i>\n")
+  (insert "<blockquote>\n")
   (yank)
   (unless (eq (line-beginning-position) (point))
     (insert "\n"))
-  (insert "</i></blockquote>"))
+  (insert "</blockquote>"))
 
 (defun weblog-insert-ellipsis ()
   (interactive)
@@ -2133,7 +2167,7 @@ Just insert 'text' if the 'file' does not exist in directory 'dir'"
 (define-key weblog-mode-map "\M-!" 'weblog-insert-comment)
 (define-key weblog-mode-map "\C-x\C-s" 'weblog-save-both)
 (define-key weblog-mode-map "\C-x\C-a" 'weblog-add-shortcut)
-(define-key weblog-mode-map "\C-x\C-i" 'weblog-upload-index)
+(define-key weblog-mode-map "\C-x\C-u" 'weblog-upload-index)
 (define-key weblog-mode-map "\C-\M-a" 'weblog-yank-link)
 (define-key weblog-mode-map "\C-\M-u" 'weblog-yank-blockquote)
 (define-key weblog-mode-map "\C-\M-i" 'weblog-yank-centered-image)
@@ -2143,3 +2177,95 @@ Just insert 'text' if the 'file' does not exist in directory 'dir'"
 (define-key weblog-mode-map "\M-p" 'weblog-insert-break)
 (define-key weblog-mode-map "\C-xi" 'weblog-italicize-word)
 (define-key weblog-mode-map "\C-\M-l" 'weblog-insert-permalink)
+
+
+
+;==============================================================================
+;
+;    Christophe's additions
+;
+;==============================================================================
+
+;; {info name text} macro
+;; Insert a reference to the named info with the given text
+(defun weblog-macro-example (name &optional text)
+  (if (null text) (setq text name))
+  (concat "<a href=\"{blogToplevel}examples/" name ".html\">" text "</A>"))
+
+;; {picl pic} and {picr pic} macros
+;; Insert a picture in a table aligned left or right
+(defun weblog-macro-pic (name &optional center caption width)
+  (let ((widtht
+         (cond ((stringp width) (concat " width=\"" width "\""))
+               ((numberp width) (concat " width=\"" (format "%d" width) "\""))
+               (t ""))))
+    (concat
+     (if (string= center "center") "<p align=\"center\">")
+     "<img src=\"" *weblog-picdir* name ".jpg\"" widtht
+     (if (null center)  "" (concat " align=\"" center "\""))
+     (if (null caption) "" (concat " alt=\"" caption "\">"))
+     (if (string= center "center") "</p>"))))
+(defun weblog-macro-picl (name &optional caption width)
+  (weblog-macro-pic name "left" caption width))
+(defun weblog-macro-picc (name &optional caption width)
+  (weblog-macro-pic name "center" caption width))
+(defun weblog-macro-picr (name &optional caption width)
+  (weblog-macro-pic name "right" caption width))
+(defun weblog-macro-picdir (name)
+  (setq *weblog-picdir* (concat name "/")))
+
+;; {pre} macro
+;; Insert a reference to the named info with the given text
+(defun weblog-macro-pre ()
+  (message "Macro pre invoked point=%d" (point))
+  (save-excursion
+    (let ((start (point))
+          (end (search-forward "{erp}")))
+      (let ((text (weblog-process-codemap (buffer-substring start end))))
+        (delete-region start end)
+        (concat "<pre>" text "</pre>")))))
+(defun weblog-macro-erp ()
+  "</pre>")
+(defun weblog-macro-tt (text)
+  (concat "<tt>" (weblog-process-codemap text) "</tt>"))
+
+;; section macro defines a new section
+(defun weblog-macro-section (name)
+  (setq *weblog-section* (+ *weblog-section* 1))
+  (concat "<h3>" name "</h3>"))
+
+(defun weblog-macro-gitrev (version &optional caption)
+  (if (null caption)
+      (setq caption version))
+  (setq rev
+        (concat "<a href=\"https://sourceforge.net/p/tao3d/code/ci/"
+           version
+           "\">"
+           caption
+           "</a>"))
+  (if (null caption)
+      (weblog-macro-tt rev)
+    rev))
+(defun weblog-macro-git (name &optional caption dir)
+  (if (null caption)
+      (setq caption name))
+  (if (null dir)
+      (setq dir "xlr"))
+  (setq name (concat "xl2/" dir "/" name))
+  (weblog-macro-tt
+   (concat "<A href=\"http://xlr.git.sourceforge.net/git/gitweb.cgi?p=xlr/xlr;a=blob;f="
+           name
+           "\">"
+           caption
+           "</A>")))
+
+;; Macro to link to the wikipedia
+(defun weblog-macro-wiki (name &optional caption)
+  (concat "<A href=\"http://en.wikipedia.org/wiki/"
+          name
+          "\">"
+          (if (null caption) name caption)
+          "</A>"))
+
+(defun weblog-macro-link (link)
+  (concat "<A href=\"" link "\">" link "</A>"))
