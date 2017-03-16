@@ -541,10 +541,11 @@ File defaults to *weblog-shortcuts-file*"
      (let ((cnt (weblog-expand-macros)))
        (if (eql 0 cnt) (return))))
     (weblog-narrow
-     "<body" "</body>"
+     "<!--BEGIN-BLOGMAX-->" "<!--END-BLOGMAX-->"
      (weblog-insert-bugmenot-macros)
      (weblog-add-preformatted)
      (weblog-add-bullets)
+     (weblog-add-numbered-lists)
      (weblog-add-paragraphs))
     (unless leave-escapes (weblog-remove-escapes))))
 
@@ -673,24 +674,42 @@ all text files."
 
 (defun weblog-add-paragraphs ()
   "Add <p>...</p> sections for double newlines in HTML body"
-  (weblog-do-replacement
-   '(lambda (s) (concat "<p>" s "</p>\n"))
-   "\n\n" "\n\n" nil t))
+  (goto-char (point-min))
+  (while (re-search-forward "^[^ \t<{\n]\\(.+\n\\)+?$" nil t)
+    (replace-match "<p>\\&</p>\n" nil nil))
+  (goto-char (point-min))
+  (while (search-forward "\n</p>" nil t)
+    (replace-match "</p>")))
 
 (defun weblog-add-bullets ()
   "Add <ul>...</ul> sections for lines beginning in * in HTML body"
-  (weblog-do-replacement
-   '(lambda (s) (concat "<ul>\n" s "\n</ul>"))
-   "\n**\n" "\n**\n" nil t)
-  (weblog-do-replacement
-   '(lambda (s) (concat "<ol>\n" s "\n</ol>"))
-   "\n##\n" "\n##\n" nil t)
-  (weblog-do-replacement
-   '(lambda (s) (concat "\n<li>" s "</li>\n"))
-   "\n*" "\n\n" nil t)
-  (weblog-do-replacement
-   '(lambda (s) (concat "\n<li>" s "</li>\n"))
-   "\n#" "\n\n" nil t))
+
+  (goto-char (point-min))
+  (while (re-search-forward "^\\(\\* \\(.+\n[ \t]*\\)+\n[ \t]*\\)+" nil t)
+    (save-restriction
+      (narrow-to-region (match-beginning 0) (match-end 0))
+      (replace-match "<ul>\n\\&</ul>\n" nil nil)
+      (goto-char (point-min))
+      (while (re-search-forward "^\\* \\(\\(.+\n[ \t]*\\)+\\)\n" nil t)
+        (replace-match "<li>\\1</li>\n"))
+      (goto-char (point-min))
+      (while (search-forward "\n</li>" nil t)
+        (replace-match "</li>")))))
+
+(defun weblog-add-numbered-lists ()
+  "Add <ol>...</ol> sections for lines beginning in # in HTML body"
+
+  (goto-char (point-min))
+  (while (re-search-forward "^\\(\\# \\(.+\n[ \t]*\\)+\n[ \t]*\\)+" nil t)
+    (save-restriction
+      (narrow-to-region (match-beginning 0) (match-end 0))
+      (replace-match "<ol>\n\\&</ol>\n" nil nil)
+      (goto-char (point-min))
+      (while (re-search-forward "^\\# \\(\\(.+\n[ \t]*\\)+\\)\n" nil t)
+        (replace-match "<li>\\1</li>\n"))
+      (goto-char (point-min))
+      (while (search-forward "\n</li>" nil t)
+        (replace-match "</li>")))))
 
 (defun weblog-add-preformatted ()
   "Add <pre>...</pre> sections for text between ```"
@@ -2287,18 +2306,17 @@ Just insert 'text' if the 'file' does not exist in directory 'dir'"
   (setq *weblog-section* (+ *weblog-section* 1))
   (concat "<h4>" name "</h4>"))
 
-(defun weblog-macro-tao-git (version &optional caption)
+(defun weblog-macro-git (repo version &optional caption)
   (if (null caption)
-      (setq caption version))
-  (setq rev
-        (concat "<a href=\"https://sourceforge.net/p/tao3d/code/ci/"
-           version
-           "\">"
-           caption
-           "</a>"))
-  (if (null caption)
-      (weblog-macro-tt rev)
-    rev))
+      (setq caption (concat repo ":" version)))
+  (concat "<a href=\"https://github.com/c3d/"
+          repo
+          "/commit/"
+          commit
+          "\">"
+          caption
+          "</a>"))
+
 (defun weblog-macro-xl-git (name &optional caption dir)
   (if (null caption)
       (setq caption name))
