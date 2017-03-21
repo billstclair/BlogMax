@@ -713,9 +713,9 @@ all text files."
 
 (defun weblog-add-preformatted ()
   "Add <pre>...</pre> sections for text between ```"
-  (weblog-do-replacement
-   '(lambda (s) (concat "<pre>" s "</pre>"))
-   "```" "```" nil t))
+  (goto-char (point-min))
+  (while (re-search-forward "{{{\n*\\(\\(.*?\n*?\\)*?\\)}}}" nil t)
+    (replace-match "<pre>\\1</pre>" nil nil)))
 
 (defun weblog-expand-macros ()
   (weblog-do-replacement
