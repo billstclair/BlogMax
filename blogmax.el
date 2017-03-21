@@ -587,8 +587,7 @@ replace only the string."
            (unless (stringp new-s)
              (setq new-s (with-output-to-string (princ new-s))))
            (when keep-delims (setq new-s (concat start-delim new-s end-delim)))
-           (insert new-s)
-           (backward-char 1)))))))
+           (insert new-s)))))))
 
 (defmacro weblog-narrow (start-delim end-delim &rest body)
   "Apply the body within a section identified by begin-delim and end-delim"
@@ -720,22 +719,22 @@ all text files."
 (defun weblog-expand-macros ()
   (weblog-do-replacement
    '(lambda (s)
-      (ignore-errors
-        (if (eq 0 (length s))
-            nil
-          (cond ((eq *weblog-at-sign-char* (elt s 0))
-                 ;; {@shortcut} looks up shortcut
-                 (weblog-lookup-shortcut (substring s 1)))
-                ((eq *weblog-equal-sign-char* (elt s 0))
-                 ;; {=forms...} evals (forms...)
-                 (let ((form (car (read-from-string
-                                   (concat "(" (substring s 1) ")")))))
-                   (eval form)))
-                (t
-                 ;; {forms...} evals (weblog-macro-forms...)
-                 (let ((form (car (read-from-string
-                                   (concat "(weblog-macro-" s ")")))))
-                   (eval form)))))))
+      (if (eq 0 (length s))
+          nil
+        (cond ((eq *weblog-at-sign-char* (elt s 0))
+               ;; {@shortcut} looks up shortcut
+               (weblog-lookup-shortcut (substring s 1)))
+              ((eq *weblog-equal-sign-char* (elt s 0))
+               ;; {=forms...} evals (forms...)
+               (let ((form (car (read-from-string
+                                 (concat "(" (substring s 1) ")")))))
+                 (eval form)))
+              ((eq (char-syntax (elt s 0)) ?w)
+               ;; {forms...} evals (weblog-macro-forms...)
+               (let ((form (car (read-from-string
+                                 (concat "(weblog-macro-" s ")")))))
+                 (message (format "Form:%s" form))
+                 (ignore-errors (eval form)))))))
    "{" "}" nil t))
 
 (defun weblog-remove-escapes ()
