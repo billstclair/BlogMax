@@ -2340,3 +2340,8 @@ Just insert 'text' if the 'file' does not exist in directory 'dir'"
 
 (defun weblog-macro-link (link)
   (concat "<A href=\"" link "\">" link "</A>"))
+
+(defun weblog-macro-youtube (link)
+  (concat "<iframe class=\"youtube\" src=\""
+          (replace-regexp-in-string "/watch\\?v=" "/embed/" link)
+          "\" frameborder=\"0\" allowfullscreen></iframe>"))
