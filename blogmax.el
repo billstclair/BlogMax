@@ -321,14 +321,14 @@
     ("\221" "'")
     ("\205" "...")
     ("\240" "")
+    ("" "{tt \"")
+    ("" "\"}")
     ))
 (defconst *weblog-repl-map*
   '(
     (";-)" "<img class=\"smiley\" src=\"wink-smiley.png\"/>")
     (":-)" "<img class=\"smiley\" src=\"smiley.png\"/>")
-    ("" "{tt \"")
-    ("" "\"}")
-    ("#\\([0-9]+\\)" "<a href=\"https://nano.taodyne.com/redmine/issues/\\1\">#\\1</a>")
+    ("rhbz\\([0-9]+\\)" "<a href=\"http://bugzilla.redhat.com/show_bug.cgi?id=\\1\">Red Hat Bugzilla \\1</a>")
     ))
 
 (defconst *weblog-code-map*
@@ -540,10 +540,15 @@ File defaults to *weblog-shortcuts-file*"
     (loop
      (let ((cnt (weblog-expand-macros)))
        (if (eql 0 cnt) (return))))
-    (weblog-insert-bugmenot-macros)
-    (weblog-add-paragraphs)
+    (weblog-narrow
+     "<!--BEGIN-BLOGMAX-->" "<!--END-BLOGMAX-->"
+     (weblog-insert-bugmenot-macros)
+     (weblog-add-preformatted)
+     (weblog-add-bullets)
+     (weblog-add-numbered-lists)
+     (weblog-add-paragraphs))
     (unless leave-escapes (weblog-remove-escapes))))
-  
+
 (defun search-forward-non-escaped (string &optional limit)
   (loop
    (let  ((pos (search-forward string limit t)))
@@ -583,6 +588,17 @@ replace only the string."
              (setq new-s (with-output-to-string (princ new-s))))
            (when keep-delims (setq new-s (concat start-delim new-s end-delim)))
            (insert new-s)))))))
+
+(defmacro weblog-narrow (start-delim end-delim &rest body)
+  "Apply the body within a section identified by begin-delim and end-delim"
+  `(save-restriction
+     (goto-char (point-min))
+    (setq begin (search-forward-non-escaped ,start-delim nil))
+    (unless (null begin)
+      (setq end (search-forward-non-escaped ,end-delim nil))
+      (unless (null end)
+        (narrow-to-region begin end)
+        ,@body))))
 
 (defun weblog-convert-shortcuts ()
   "Convert shortcuts from double-quote delimited to {=....} delimited"
@@ -656,29 +672,69 @@ all text files."
   (cadr (assoc (downcase name) *weblog-shortcuts*)))
 
 (defun weblog-add-paragraphs ()
-  (weblog-do-replacement
-   '(lambda (s) "\n<p>\n")
-   "\n\n" nil))
+  "Add <p>...</p> sections for double newlines in HTML body"
+  (goto-char (point-min))
+  (while (re-search-forward "^[^ \t<{\n]\\(.+\n\\)+?$" nil t)
+    (replace-match "<p>\\&</p>\n" nil nil))
+  (goto-char (point-min))
+  (while (search-forward "\n</p>" nil t)
+    (replace-match "</p>")))
+
+(defun weblog-add-bullets ()
+  "Add <ul>...</ul> sections for lines beginning in * in HTML body"
+
+  (goto-char (point-min))
+  (while (re-search-forward "^\\(\\* \\(.+\n[ \t]*\\)+\n[ \t]*\\)+" nil t)
+    (save-restriction
+      (narrow-to-region (match-beginning 0) (match-end 0))
+      (replace-match "<ul>\n\\&</ul>\n" nil nil)
+      (goto-char (point-min))
+      (while (re-search-forward "^\\* \\(\\(.+\n[ \t]*\\)+\\)\n" nil t)
+        (replace-match "<li>\\1</li>\n"))
+      (goto-char (point-min))
+      (while (search-forward "\n</li>" nil t)
+        (replace-match "</li>")))))
+
+(defun weblog-add-numbered-lists ()
+  "Add <ol>...</ol> sections for lines beginning in # in HTML body"
+
+  (goto-char (point-min))
+  (while (re-search-forward "^\\(\\# \\(.+\n[ \t]*\\)+\n[ \t]*\\)+" nil t)
+    (save-restriction
+      (narrow-to-region (match-beginning 0) (match-end 0))
+      (replace-match "<ol>\n\\&</ol>\n" nil nil)
+      (goto-char (point-min))
+      (while (re-search-forward "^\\# \\(\\(.+\n[ \t]*\\)+\\)\n" nil t)
+        (replace-match "<li>\\1</li>\n"))
+      (goto-char (point-min))
+      (while (search-forward "\n</li>" nil t)
+        (replace-match "</li>")))))
+
+(defun weblog-add-preformatted ()
+  "Add <pre>...</pre> sections for text between ```"
+  (goto-char (point-min))
+  (while (re-search-forward "{{{\n*\\(\\(.*?\n*?\\)*?\\)}}}" nil t)
+    (replace-match "<pre>\\1</pre>" nil nil)))
 
 (defun weblog-expand-macros ()
   (weblog-do-replacement
    '(lambda (s)
-      (ignore-errors
-        (if (eq 0 (length s))
-            nil
-          (cond ((eq *weblog-at-sign-char* (elt s 0))
-                 ;; {@shortcut} looks up shortcut
-                 (weblog-lookup-shortcut (substring s 1)))
-                ((eq *weblog-equal-sign-char* (elt s 0))
-                 ;; {=forms...} evals (forms...)
-                 (let ((form (car (read-from-string
-                                   (concat "(" (substring s 1) ")")))))
-                   (eval form)))
-                (t
-                 ;; {forms...} evals (weblog-macro-forms...)
-                 (let ((form (car (read-from-string
-                                   (concat "(weblog-macro-" s ")")))))
-                   (eval form)))))))
+      (if (eq 0 (length s))
+          nil
+        (cond ((eq *weblog-at-sign-char* (elt s 0))
+               ;; {@shortcut} looks up shortcut
+               (weblog-lookup-shortcut (substring s 1)))
+              ((eq *weblog-equal-sign-char* (elt s 0))
+               ;; {=forms...} evals (forms...)
+               (let ((form (car (read-from-string
+                                 (concat "(" (substring s 1) ")")))))
+                 (eval form)))
+              ((eq (char-syntax (elt s 0)) ?w)
+               ;; {forms...} evals (weblog-macro-forms...)
+               (let ((form (car (read-from-string
+                                 (concat "(weblog-macro-" s ")")))))
+                 (message (format "Form:%s" form))
+                 (ignore-errors (eval form)))))))
    "{" "}" nil t))
 
 (defun weblog-remove-escapes ()
@@ -875,7 +931,7 @@ If prefix arg is 2, upload all text files in the current directory and its sub-d
           (weblog-maybe-upload-previous-month-file))))
     (cond ((eql 0 index-only) (weblog-upload-month))
           ((eql 2 index-only) (weblog-upload-directory-text))))
-  (shell-command "./rsync-blog"))
+  (shell-command "./rsync-blog &"))
 
 (defun weblog-upload-directory-text (&optional file)
   "Regenerate html for and upload every \".txt\" file
@@ -933,8 +989,8 @@ MONTH and YEAR default to today's month and year."
                    (setq mdy (weblog-file-mdy file-name))
                    (or (equal (file-name-nondirectory file-name)
                               latest-text-file)
-                       (and (eq month (extract-calendar-month mdy))
-                            (eq year (extract-calendar-year mdy))
+                       (and (eq month (calendar-extract-month mdy))
+                            (eq year (calendar-extract-year mdy))
                             (not (apply 'weblog-mdy-in-future-p mdy))))))
        *weblog-file-regexp*)
       nil
@@ -1282,7 +1338,10 @@ Upload it to the FTP server."
                      (weblog-file-contents file))
                     (*weblog-story-file* file))
                 (weblog-expand-buffer t file)
-                (setq res (concat res (weblog-buffer-contents)))))
+                (setq res
+                      (concat res
+                              (weblog-process-replmap
+                               (weblog-buffer-contents))))))
             res)
         (kill-buffer buf)))))
 
@@ -1362,9 +1421,9 @@ Upload it to the FTP server."
   (when (stringp file)
     (let ((mdy (weblog-file-mdy file)))
       (when mdy
-	(let* ((month (extract-calendar-month mdy))
-	       (year (extract-calendar-year mdy))
-	       (date (extract-calendar-day mdy))
+	(let* ((month (calendar-extract-month mdy))
+	       (year (calendar-extract-year mdy))
+	       (date (calendar-extract-day mdy))
 	       (day (calendar-day-of-week (list month 1 year)))
 	       (last-day-of-month (calendar-last-day-of-month month year))
                (month-file (weblog-month-file-name month year ".html"))
@@ -1524,8 +1583,8 @@ Upload it to the FTP server."
      nil;; mapping function. Won't ever be called
      (function (lambda (file-name)
                  (let* ((mdy (weblog-file-mdy file-name))
-                        (m (extract-calendar-month mdy))
-                        (y (extract-calendar-year mdy)))
+                        (m (calendar-extract-month mdy))
+                        (y (calendar-extract-year mdy)))
                    (when (or (and (eql y year) (<= m month))
                              (< y year))
                      (return-from map (apply 'weblog-day-file mdy))))
@@ -1549,8 +1608,8 @@ Upload it to the FTP server."
      nil;; mapping function. Won't ever be called
      (function (lambda (file-name)
                  (let* ((mdy (weblog-file-mdy file-name))
-                        (m (extract-calendar-month mdy))
-                        (y (extract-calendar-year mdy)))
+                        (m (calendar-extract-month mdy))
+                        (y (calendar-extract-year mdy)))
                    (when (or (and (eql y year) (>= m month))
                              (> y year))
                      (return-from map (apply 'weblog-day-file mdy))))
@@ -1563,9 +1622,9 @@ Upload it to the FTP server."
 (defun weblog-macro-storyDate ()
   (let ((mdy (weblog-file-mdy *weblog-story-file*)))
     (when mdy
-      (let ((month (extract-calendar-month mdy))
-            (year (extract-calendar-year mdy))
-            (date (extract-calendar-day mdy)))
+      (let ((month (calendar-extract-month mdy))
+            (year (calendar-extract-year mdy))
+            (date (calendar-extract-day mdy)))
         (format "%s, %s %d, %d"
                 (calendar-day-name mdy)
                 (calendar-month-name month)
@@ -1810,9 +1869,9 @@ Return the file name of the month file"
       (setq file (concat (file-name-directory (buffer-file-name)) file-name)))
     (weblog-with-init-params file
       (let* ((mdy (weblog-file-mdy file))
-             (month (extract-calendar-month mdy))
+             (month (calendar-extract-month mdy))
              (month-name (calendar-month-name month))
-             (year (extract-calendar-year mdy))
+             (year (calendar-extract-year mdy))
              (month-file (weblog-month-file-name month year))
              (dir (file-name-directory file))
              (month-path (concat dir month-file))
@@ -1869,7 +1928,7 @@ Return the file name of the month file"
   (let ((file (or file-name (buffer-file-name))))
     (weblog-with-init-params file
       (let* ((mdy (weblog-file-mdy file))
-             (year (extract-calendar-year mdy))
+             (year (calendar-extract-year mdy))
              (year-name (format "%d" year))
              (year-file (concat (weblog-format-2d (% year 100))
                                  ".txt"))
@@ -2013,9 +2072,9 @@ Just insert 'text' if the 'file' does not exist in directory 'dir'"
   "Create and upload last month's index if today is the first day of this month"
   (let* ((file (or file-name (buffer-file-name)))
          (mdy (weblog-file-mdy file))
-         (month (extract-calendar-month mdy))
-         (day (extract-calendar-day mdy))
-         (year (extract-calendar-year mdy))
+         (month (calendar-extract-month mdy))
+         (day (calendar-extract-day mdy))
+         (year (calendar-extract-year mdy))
          (first-day-file-this-month
           (weblog-first-day-file-in-next-month (1- month) year))
          (this-day-file (weblog-day-file month day year)))
@@ -2175,7 +2234,7 @@ Just insert 'text' if the 'file' does not exist in directory 'dir'"
 (define-key weblog-mode-map "\C-x\M-." 'weblog-insert-ellipsis)
 (define-key weblog-mode-map "\C-\M-r" 'weblog-insert-break)
 (define-key weblog-mode-map "\M-p" 'weblog-insert-break)
-(define-key weblog-mode-map "\C-xi" 'weblog-italicize-word)
+(define-key weblog-mode-map "\C-\M-i" 'weblog-italicize-word)
 (define-key weblog-mode-map "\C-\M-l" 'weblog-insert-permalink)
 
 
@@ -2201,7 +2260,7 @@ Just insert 'text' if the 'file' does not exist in directory 'dir'"
                (t ""))))
     (concat
      (if (string= center "center") "<p align=\"center\">")
-     "<img src=\"" *weblog-picdir* name ".jpg\"" widtht
+     "<img src=\"" *weblog-picdir* name "\"" widtht
      (if (null center)  "" (concat " align=\"" center "\""))
      (if (null caption) "" (concat " alt=\"" caption "\">"))
      (if (string= center "center") "</p>"))))
@@ -2234,19 +2293,30 @@ Just insert 'text' if the 'file' does not exist in directory 'dir'"
   (setq *weblog-section* (+ *weblog-section* 1))
   (concat "<h3>" name "</h3>"))
 
-(defun weblog-macro-gitrev (version &optional caption)
+(defun weblog-macro-subsection (name)
+  (setq *weblog-section* (+ *weblog-section* 1))
+  (concat "<h4>" name "</h4>"))
+
+(defun weblog-macro-t (name)
+  (setq *weblog-section* (+ *weblog-section* 1))
+  (concat "<h3>" name "</h3>"))
+
+(defun weblog-macro-st (name)
+  (setq *weblog-section* (+ *weblog-section* 1))
+  (concat "<h4>" name "</h4>"))
+
+(defun weblog-macro-git (repo version &optional caption)
   (if (null caption)
-      (setq caption version))
-  (setq rev
-        (concat "<a href=\"https://sourceforge.net/p/tao3d/code/ci/"
-           version
-           "\">"
-           caption
-           "</a>"))
-  (if (null caption)
-      (weblog-macro-tt rev)
-    rev))
-(defun weblog-macro-git (name &optional caption dir)
+      (setq caption (concat repo ":" version)))
+  (concat "<a href=\"https://github.com/c3d/"
+          repo
+          "/commit/"
+          commit
+          "\">"
+          caption
+          "</a>"))
+
+(defun weblog-macro-xl-git (name &optional caption dir)
   (if (null caption)
       (setq caption name))
   (if (null dir)
@@ -2269,3 +2339,8 @@ Just insert 'text' if the 'file' does not exist in directory 'dir'"
 
 (defun weblog-macro-link (link)
   (concat "<A href=\"" link "\">" link "</A>"))
+
+(defun weblog-macro-youtube (link)
+  (concat "<iframe class=\"youtube\" src=\""
+          (replace-regexp-in-string "/watch\\?v=" "/embed/" link)
+          "\" frameborder=\"0\" allowfullscreen></iframe>"))
