@@ -328,7 +328,11 @@
   '(
     (";-)" "<img class=\"smiley\" src=\"wink-smiley.png\"/>")
     (":-)" "<img class=\"smiley\" src=\"smiley.png\"/>")
+    (":-(" "<img class=\"smiley\" src=\"frown-smiley.png\"/>")
     ("rhbz\\([0-9]+\\)" "<a href=\"http://bugzilla.redhat.com/show_bug.cgi?id=\\1\">Red Hat Bugzilla \\1</a>")
+    ("kbz\\([0-9]+\\)" "<a href=\"http://bugzilla.kernel.org/show_bug.cgi?id=\\1\">Kernel Bugzilla \\1</a>")
+    ("fdbz\\([0-9]+\\)" "<a href=\"https://bugs.freedesktop.org/show_bug.cgi?id=\\1\">FreeDesktop Bug \\1</a>")
+    ("gbz\\([0-9]+\\)" "<a href=\"https://debbugs.gnu.org/cgi/bugreport.cgi?bug=\\1\">GNU Bug \\1</a>")
     ))
 
 (defconst *weblog-code-map*
@@ -731,10 +735,10 @@ all text files."
                  (eval form)))
               ((eq (char-syntax (elt s 0)) ?w)
                ;; {forms...} evals (weblog-macro-forms...)
-               (let ((form (car (read-from-string
+               (ignore-errors
+                (let ((form (car (read-from-string
                                  (concat "(weblog-macro-" s ")")))))
-                 (message (format "Form:%s" form))
-                 (ignore-errors (eval form)))))))
+                  (eval form)))))))
    "{" "}" nil t))
 
 (defun weblog-remove-escapes ()
@@ -1310,7 +1314,7 @@ Upload it to the FTP server."
 
 ;; {dayTemplate} macro
 (defun weblog-macro-dayTemplate ()
-  (cond ((eq 'generate-index *weblog-story-content*)
+    (cond ((eq 'generate-index *weblog-story-content*)
          (weblog-index-content "{dayTemplate}"))
         (t (weblog-file-contents *weblog-day-template-file*))))
 
@@ -2276,7 +2280,6 @@ Just insert 'text' if the 'file' does not exist in directory 'dir'"
 ;; {pre} macro
 ;; Insert a reference to the named info with the given text
 (defun weblog-macro-pre ()
-  (message "Macro pre invoked point=%d" (point))
   (save-excursion
     (let ((start (point))
           (end (search-forward "{erp}")))
@@ -2344,3 +2347,4 @@ Just insert 'text' if the 'file' does not exist in directory 'dir'"
   (concat "<iframe class=\"youtube\" src=\""
           (replace-regexp-in-string "/watch\\?v=" "/embed/" link)
           "\" frameborder=\"0\" allowfullscreen></iframe>"))
+
