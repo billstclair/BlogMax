@@ -2352,3 +2352,10 @@ Just insert 'text' if the 'file' does not exist in directory 'dir'"
   (concat "<iframe class=\"youtube\" src=\""
           (replace-regexp-in-string "/watch\\?v=" "/embed/" link)
           "\" frameborder=\"0\" allowfullscreen></iframe>"))
+
+; Mermaid diagram support - Neeed to add this to <head> in page template:
+;    <!-- Mermaid (diagrams) -->
+;    <script src="https://cdn.jsdelivr.net/npm/mermaid@8.4.0/dist/mermaid.min.js"></script>
+;    <script>mermaid.initialize({startOnLoad:true});</script>
+(defun weblog-macro-diagram () "<div class=\"mermaid\">")
+(defun weblog-macro-margaid () "</div>")
