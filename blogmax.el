@@ -114,7 +114,7 @@
 ;;             4 - Make and upload index only.
 ;; 010606 wws  Test on Linux in Emacs 20.4.1.
 ;;             Add missing </td> in calendar.
-;; 010605 wws  First release 
+;; 010605 wws  First release
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -257,7 +257,7 @@
 ;; Bound to the "pl-macro-text" parameter in the *weblog-init-file*
 (defvar *weblog-pl-macro-text* "#")
 
-;; A list of domains links to which will be followed by a {BugMeNot "..."} 
+;; A list of domains links to which will be followed by a {BugMeNot "..."}
 ;; link.
 (defvar *weblog-bugmenot-auto-list* nil)
 
@@ -328,7 +328,11 @@
   '(
     (";-)" "<img class=\"smiley\" src=\"wink-smiley.png\"/>")
     (":-)" "<img class=\"smiley\" src=\"smiley.png\"/>")
+    (":-(" "<img class=\"smiley\" src=\"frown-smiley.png\"/>")
     ("rhbz\\([0-9]+\\)" "<a href=\"http://bugzilla.redhat.com/show_bug.cgi?id=\\1\">Red Hat Bugzilla \\1</a>")
+    ("kbz\\([0-9]+\\)" "<a href=\"http://bugzilla.kernel.org/show_bug.cgi?id=\\1\">Kernel Bugzilla \\1</a>")
+    ("fdbz\\([0-9]+\\)" "<a href=\"https://bugs.freedesktop.org/show_bug.cgi?id=\\1\">FreeDesktop Bug \\1</a>")
+    ("gbz\\([0-9]+\\)" "<a href=\"https://debbugs.gnu.org/cgi/bugreport.cgi?bug=\\1\">GNU Bug \\1</a>")
     ))
 
 (defconst *weblog-code-map*
@@ -373,7 +377,7 @@
     ("email" *weblog-email*)
     ("url" *weblog-url*)
     ("ftp-directory" *weblog-ftp-directory*)
-    ("index-days" *weblog-index-days* 
+    ("index-days" *weblog-index-days*
      (lambda (x) (car (read-from-string x))) integerp)
     ("shortcuts-file" *weblog-shortcuts-file*)
     ("month-index" *weblog-generate-month-index-p*
@@ -497,7 +501,7 @@ or by loading *weblog-shortcuts=file* from *weblog-directory*."
   (let ((elt (assoc *weblog-directory* *weblog-shortcuts-alist*)))
     (if elt
         (setq *weblog-shortcuts* (cdr elt))
-      (weblog-load-shortcuts))))  
+      (weblog-load-shortcuts))))
 
 ;; Load the *weblog-shortcuts-file* and put the result in *weblog-shortcuts*
 (defun weblog-load-shortcuts ()
@@ -731,10 +735,10 @@ all text files."
                  (eval form)))
               ((eq (char-syntax (elt s 0)) ?w)
                ;; {forms...} evals (weblog-macro-forms...)
-               (let ((form (car (read-from-string
+               (ignore-errors
+                (let ((form (car (read-from-string
                                  (concat "(weblog-macro-" s ")")))))
-                 (message (format "Form:%s" form))
-                 (ignore-errors (eval form)))))))
+                  (eval form)))))))
    "{" "}" nil t))
 
 (defun weblog-remove-escapes ()
@@ -787,7 +791,7 @@ using the *weblog-page-template-file*."
                 *weblog-saving-story* t))
         (let* ((content (weblog-process-replmap (weblog-buffer-contents)))
                (ext (file-name-extension file-name))
-               (ext-len (if (null ext) 
+               (ext-len (if (null ext)
                             (progn (setq file-name (concat file-name ".")) 0)
                           (length ext)))
                (html-file (concat
@@ -1191,7 +1195,7 @@ Upload it to the FTP server."
              (gmt-time (weblog-rss-format-time time t))
              (time-string (concat gmt-time " GMT"))
              ;(pub-time-string (concat (weblog-rss-format-time pub-time t)
-             ;                         " GMT"))                            
+             ;                         " GMT"))
              (html-buf (create-file-buffer text-file))
              (idx 0))
         (set-buffer rss-buf)
@@ -1310,7 +1314,7 @@ Upload it to the FTP server."
 
 ;; {dayTemplate} macro
 (defun weblog-macro-dayTemplate ()
-  (cond ((eq 'generate-index *weblog-story-content*)
+    (cond ((eq 'generate-index *weblog-story-content*)
          (weblog-index-content "{dayTemplate}"))
         (t (weblog-file-contents *weblog-day-template-file*))))
 
@@ -1446,7 +1450,7 @@ Upload it to the FTP server."
               (princ "<td>")
               (let ((column-day (mod (+ i start-day) 7)))
                 (princ (calendar-day-name column-day 2 t)))
-              (princ "</td>\n"))          
+              (princ "</td>\n"))
             (princ "</tr><tr>\n")
             (setq day (mod (- day start-day) 7))
             (when (> day 0)
@@ -1523,13 +1527,15 @@ Upload it to the FTP server."
            (mm (weblog-integer-substring name 2 4 1))
            (dd (weblog-integer-substring name 4 6 1)))
       (setq yy (if (< yy 70) (+ 2000 yy) (+ 1900 yy)))
-      (list mm dd yy))))
+      (if (and (= yy 2000) (= mm 01) (= dd 01))
+          (calendar-current-date)
+        (list mm dd yy)))))
 
 (defun weblog-integer-substring (str start end default)
   (let ((res (ignore-errors
                (car (read-from-string (substring str start end))))))
     (if (integerp res) res default)))
-        
+
 (defun weblog-princ-dayname (dayname)
   "Print a single day name for weblog-macro-calendar"
   (princ dayname))
@@ -1665,7 +1671,7 @@ Upload it to the FTP server."
 (defun weblog-add-shortcut (&optional name url)
   "Add a shortcut to the table.
 If the name begins with \"=\", don't wrap an anchor tag around the url."
-  (interactive "s Add Shortcut Named: 
+  (interactive "s Add Shortcut Named:
 s URL: ")
   (weblog-with-init-params (buffer-file-name)
     (let (entry)
@@ -1778,7 +1784,7 @@ s URL: ")
   (interactive)
   (insert "{pl \"\"}")
   (backward-char 2))
-  
+
 (defun weblog-macro-bugmenot (url)
   (concat "<a href=\"http://www.bugmenot.com/view.php?url="
           url
@@ -1974,7 +1980,7 @@ Just insert 'text' if the 'file' does not exist in directory 'dir'"
 
 (defun weblog-insert-month-index-entries (dir start-year start-month start-day
                                               end-year end-month end-day)
-  
+
   (do ((year start-year (1+ year)))
       ((> year end-year))
     (do ((month start-month (1+ month)))
@@ -2067,7 +2073,7 @@ Just insert 'text' if the 'file' does not exist in directory 'dir'"
          (files (weblog-directory-files *weblog-directory* nil *weblog-file-regexp* nil (weblog-year-dirs))))
     ;; Incomplete
     ))
-    
+
 (defun weblog-maybe-upload-previous-month-file (&optional file-name)
   "Create and upload last month's index if today is the first day of this month"
   (let* ((file (or file-name (buffer-file-name)))
@@ -2260,9 +2266,12 @@ Just insert 'text' if the 'file' does not exist in directory 'dir'"
                (t ""))))
     (concat
      (if (string= center "center") "<p align=\"center\">")
+     "<a href=\""  *weblog-picdir* name "\">"
      "<img src=\"" *weblog-picdir* name "\"" widtht
      (if (null center)  "" (concat " align=\"" center "\""))
-     (if (null caption) "" (concat " alt=\"" caption "\">"))
+     (if (null caption) "" (concat " alt=\"" caption "\""))
+     "/>"
+     "</a>"
      (if (string= center "center") "</p>"))))
 (defun weblog-macro-picl (name &optional caption width)
   (weblog-macro-pic name "left" caption width))
@@ -2276,7 +2285,6 @@ Just insert 'text' if the 'file' does not exist in directory 'dir'"
 ;; {pre} macro
 ;; Insert a reference to the named info with the given text
 (defun weblog-macro-pre ()
-  (message "Macro pre invoked point=%d" (point))
   (save-excursion
     (let ((start (point))
           (end (search-forward "{erp}")))
@@ -2344,3 +2352,10 @@ Just insert 'text' if the 'file' does not exist in directory 'dir'"
   (concat "<iframe class=\"youtube\" src=\""
           (replace-regexp-in-string "/watch\\?v=" "/embed/" link)
           "\" frameborder=\"0\" allowfullscreen></iframe>"))
+
+; Mermaid diagram support - Neeed to add this to <head> in page template:
+;    <!-- Mermaid (diagrams) -->
+;    <script src="https://cdn.jsdelivr.net/npm/mermaid@8.4.0/dist/mermaid.min.js"></script>
+;    <script>mermaid.initialize({startOnLoad:true});</script>
+(defun weblog-macro-diagram () "<div class=\"mermaid\">")
+(defun weblog-macro-margaid () "</div>")
